@@ -1,7 +1,7 @@
 # Podtablejs
 A simple lightweight responsive table library to fit large table dataset into small screen by hiding them and placing them in child rows with control toggles to show and hide them
 
-![podtablejs](https://github.com/inlogicstudio/podtable/tree/dev/examples/podtablejs.png)
+![podtablejs](https://github.com/inlogicstudio/podtable/blob/dev/examples/podtablejs.png)
 
 ## Installation:
 
