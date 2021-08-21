@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Podtablejs</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../dist/podtable.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+
+    <style>
+        body {
+            width: 100%;
+        }
+
+        .table td {
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body class="">
+    <div id="app" class="container-fluid pt-3">
+        <button class="btn btn-primary mb-3" @click="doAjax()">Ajax</button>
+        <div class="bg-light mt-4">
+            <table id="table" class="table" width="100%">
+                <thead class="fw-light small">
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Gender</th>
+                        <th>Occupation</th>
+                        <th>Salary</th>
+                        <th>Education</th>
+                        <th>Disability</th>
+                        <th>Mail</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="row in rows">
+                        <td data-grid-colname="Firstname">Mark</td>
+                        <td data-grid-colname="Lastname">Spencer</td>
+                        <td data-grid-colname="Gender">Male</td>
+                        <td data-grid-colname="Occupation">Robotics Engineer</td>
+                        <td data-grid-colname="Salary">$50,000</td>
+                        <td data-grid-colname="Education">MSc Robotics</td>
+                        <td data-grid-colname="Disability">Non</td>
+                        <td data-grid-colname="Mail">spencer@gmail.com</td>
+                        <td data-grid-colname="Phone">+2348451254781</td>
+                        <td data-grid-colname="Status">Active</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- <script type="module">
+        import Podtable from './dist/podtable.js';
+
+        let podtable = new Podtable('#table', {
+            keepCell: [1, 6]
+        });
+
+    </script> -->
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            let podtable = new Podtable.Podtable('#table', {
+                keepCell: [1, 6]
+            });
+        })
+    </script>
+    <script>
+        const vue = new Vue({
+            el: '#app',
+            data: {
+                rows: 10,
+            },
+            methods: {
+                doAjax() {
+                    this.rows = 0;
+                    setTimeout(() => {
+                        this.rows = 10;
+                    }, 2000)
+                }
+            }
+        })
+    </script>
+
+<script src="../dist/umd/podtable.js"></script>
+</body>
+</html>
