@@ -21,12 +21,16 @@
             font-weight: 500 !important;
             vertical-align: middle;
         }
+
+        #demo {
+            display: none;
+        }
     </style>
 </head>
 
 <body class="">
     <div id="app" class="container-fluid pt-3">
-        <button class="btn btn-primary mb-3" @click="doAjax()">Ajax</button>
+        <button class="btn btn-primary mb-3" @click="addRow()">Ajax</button>
         <div class="bg-light mt-4">
             <table id="table" class="table" width="100%">
                 <thead class="fw-light small">
@@ -46,7 +50,10 @@
                 </thead>
                 <tbody>
                     <tr v-for="row in rows">
-                        <td data-grid-colname="Firstname">Mark</td>
+                        <td data-grid-colname="Firstname">
+                            Mark
+                            <div id="demo">this is an extra-content for this cell on mobile</div>
+                        </td>
                         <td data-grid-colname="Lastname">Spencer</td>
                         <td data-grid-colname="Gender">Male</td>
                         <td data-grid-colname="Occupation">Robotics Engineer</td>
@@ -64,19 +71,45 @@
     </div>
 
     <!-- <script type="module">
-        import Podtable from './dist/podtable.js';
+        import { Podtable } from '../dist/podtable.esm.js';
 
-        let podtable = new Podtable('#table', {
-            keepCell: [1, 6]
-        });
+        let el = document.querySelector('#demo');
 
+        new Podtable('#table', {
+            keepCell: [1, 6],
+            event: true,
+            forCell: [5],
+            method: (state) => {
+                if(state.current === 5 && ! state.isCurrentShown) {
+                    el.style.display = 'block'
+                } else {
+                    el.style.display = 'none'
+                }
+
+                console.log(state)
+            }
+        })
     </script> -->
 
-    <script>
+    <script>   
         window.addEventListener('DOMContentLoaded', () => {
-            let podtable = new Podtable.Podtable('#table', {
-                keepCell: [1, 6]
-            });
+            let el =  document.querySelector('#demo')
+
+            new Podtable.Podtable('#table', {
+                keepCell: [1, 6],
+                event: true,
+                forCell: [2],
+                method: (state) => {
+                    // do anything fast here
+                    if(state.current === 2 &&  state.isCurrentShown == false) {
+                        el.style.display = 'block'
+                    } else {
+                        el.style.display = 'none'
+                    }
+
+                    console.log(state)
+                }
+            })
         })
     </script>
     <script>
@@ -86,7 +119,7 @@
                 rows: 10,
             },
             methods: {
-                doAjax() {
+                addRow() {
                     this.rows = 0;
                     setTimeout(() => {
                         this.rows = 10;
@@ -96,6 +129,6 @@
         })
     </script>
 
-<script src="../dist/umd/podtable.js"></script>
+<script src="../dist/podtable.js"></script>
 </body>
 </html>

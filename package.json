@@ -1,20 +1,25 @@
 {
   "name": "podtable",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Podtable is a library to make HTML table fit into smaller devices",
-  "main": "dist/podtable.js",
-  "main:umd": "dist/umd/podtable.js",
   "author": "Afuwape Sunday <afuwapesunday12@gmail.com>",
   "license": "MIT",
   "private": false,
+  "type": "module",
+  "source": "src/index.js",
+  "main": "dist/podtable.esm.js",
+  "unpkg": "dist/podtable.js",
+  "types": "index.d.ts",
   "scripts": {
-    "build:browser": "webpack",
-    "build": "webpack",
-    "release": "release-it"
+    "build": "npm run build:esm && npm run build:umd",
+    "build:esm": "microbundle --format esm",
+    "build:umd": "microbundle --format umd --name Podtable",
+    "prepublishOnly": "npm run build",
+    "watch": "microbundle watch --format esm"
   },
   "keywords": [
-    "table",
-    "responsive table"
+    "HTML table",
+    "responsive datatable"
   ],
   "repository": {
     "type": "git",
@@ -22,10 +27,6 @@
   },
   "homepage": "https://github.com/inlogicstudio/podtable",
   "devDependencies": {
-    "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
-    "babel-loader": "^8.2.2",
-    "webpack": "^5.51.1",
-    "webpack-cli": "^4.8.0"
+    "microbundle": "^0.13.3"
   }
 }
