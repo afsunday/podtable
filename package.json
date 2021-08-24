@@ -14,7 +14,6 @@
     "build": "npm run build:esm && npm run build:umd",
     "build:esm": "microbundle --format esm",
     "build:umd": "microbundle --format umd --name Podtable",
-    "prepublishOnly": "npm run build",
     "watch": "microbundle watch --format esm"
   },
   "keywords": [
