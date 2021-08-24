@@ -1,40 +1,52 @@
-# Podtablejs
-A simple lightweight responsive table library to fit large table dataset into small screen by hiding them and placing them in child rows with control toggles to show and hide them
+## Podtablejs
+A lightweight no dependency responsive table library to fit large table dataset into small screen by making look sweet on mobile
 
 ![podtablejs](https://github.com/inlogicstudio/podtable/blob/dev/examples/podtablejs.png)
 
-## Installation:
+**Installation**
 
 there are basically two ways to install podtablejs via npm or download and include via script tag
 
-Install via npm `npm install inlogicstudio/podtablejs`.
+Install via npm `npm install podtable` and add stylesheet.
 
-you can import podtablejs into your app by using the es import  `import` then you can includes the css as well
+```js
+import { Podtable } from 'podtable';
+```
 
-Or you can can simply add a reference to the .js file at the end of the body of your html and the .css file in the head of your html page. 
-
-**Basic usage**
-
-data-grid-colname value will be used as the name of the child row column and its should included
-the empty  column of the last cell of the thead and tbody will be used as the control column and its important this column display isn't set to none or absolute position to push off screen
+Or Download on github and reference in your page
 
 ```html
-<!-- head -->
-<!-- <link rel="stylesheet" type="text/css" href="podtable/dist/podtable.css"> -->
+<!-- In your page head add stylesheet -->
+<head>
+    ...
+    <!-- <link rel="stylesheet" type="text/css" href="podtable/dist/podtable.css"> -->
+</head>
+
+<!-- At the end of your body tag reference the js script -->
+<body>
+    ...
+
+    <!-- <script src="podtable/dist/podtable.js"></script> -->
+</body>
+
+```
+
+**Html Markup**
+
+Your html markup needs to include few things for podtable to work well and the markup should be structure with perceived standard 
+
+* A dataset data-grid-colname attributes which value will be the name of the column
+* An empty th, td for head and body element which will serve as control column
+* The control cell must not be hidden with css or push off screen with absolute positioning
+
+```html
 
 <table id="table" class="table" width="100%">
     <thead>
         <tr>
             <th>Firstname</th>
             <th>Lastname</th>
-            <th>Gender</th>
-            <th>Occupation</th>
-            <th>Salary</th>
-            <th>Education</th>
-            <th>Disability</th>
-            <th>Mail</th>
-            <th>Phone</th>
-            <th>Status</th>
+               ...
             <th></th>
         </tr>
     </thead>
@@ -42,46 +54,79 @@ the empty  column of the last cell of the thead and tbody will be used as the co
         <tr>
             <td data-grid-colname="Firstname">Mark</td>
             <td data-grid-colname="Lastname">Spencer</td>
-            <td data-grid-colname="Gender">Male</td>
-            <td data-grid-colname="Occupation">Robotics Engineer</td>
-            <td data-grid-colname="Salary">$50,000</td>
-            <td data-grid-colname="Education">MSc Robotics</td>
-            <td data-grid-colname="Disability">Non</td>
-            <td data-grid-colname="Mail">spencer@gmail.com</td>
-            <td data-grid-colname="Phone">+2348451254781</td>
-            <td data-grid-colname="Status">ACtive</td>
+               ...
             <td></td>
         </tr>
     </tbody>
 </table>
 
-<!-- End of the body tag -->
-<!-- <script src="podtable/dist/umd/podtable.js"></script> -->
 ```
+
+**Usage**
 
 ```js
 // script.js or script tag in your html
 
 window.addEventListener('DOMContentLoaded', () => {
-    let podtable = new Podtable.Podtable('#table');
+    new Podtable.Podtable('#table');
 })
+
 ```
 Using ES import
 
 ```js
-import Podtable from './dist/podtable';
 
-let podtable = new Podtable('#table');
+import { Podtable } from 'podtable';
+
+new Podtable('#table');
+
 ```
 
-The podtable instance receive config object such as which cells to keep; by default the first column will not be hidden whose index is 0;
-likewiase the control column you can then define which other cells to keep by defining their index in the `keepCell` array
+The Podtable instance receive config object with a number of available options to use
+
+* The `keepCell` option which is used to specify an array of cells to keep
+Note the first cell for the table with an index of `0` will not be hidden by default
 
 ```js
-let podtable = new Podtable('#table', {
+
+new Podtable('#table', {
     keepCell: [1, 6]
 });
+
 ```
+
+* The `event` option which receive a boolean inorder for podtable to emit an event for cells that will hidden
+* The `method` option which takes in the function to  be executed for each cell event and its used in conjuction with the event option.
+* The function passed to the method option receives an event parameter to access the event 
+* `event.current` which is the next cell index to hidden or that will be shown; an integer value
+* `event.isCurrentShown` which is boolean that indicate if the `event.current` is visible or hidden
+
+Note the function pass to the method option should not be error prone and it must be something fast
+
+```js
+let el = document.querySelector('#someElement')
+
+new Podtable('#table', {
+    keepCell: [1, 6],
+    event: true,
+    forCell: [3],
+    method: (event) => {
+        if(event.current === 3 && ! event.isCurrentShown) {
+            el.style.display = 'block'
+        } else {
+            el.style.display = 'none'
+        }
+    }
+});
+
+```
+**Examples**
+See examples in the example folder to get more inspired
+
+**Roadmap**
+* Modal as to show hidden cells content
+* Vertical column sorting 
+* Ajax row rendering
 
 **Contributing**
 
@@ -89,4 +134,4 @@ Simply fork the project then send in your pull requests.
 
 **License**
 
-Podtablejs is open source software released under the MIT license. See [LICENSE](LICENSE) for more information.
+Podtablejs is an open source and released under the MIT license.
