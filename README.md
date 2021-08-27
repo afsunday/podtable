@@ -18,7 +18,7 @@ Podtable is a no dependency table library to fit large table dataset into smalll
 
 ## Preview
 
-![podtablejs](https://github.com/inlogicstudio/podtable/blob/dev/art/podtablejs.png)
+![podtablejs](art/podtablejs.png)
 
 ## Installation
 
