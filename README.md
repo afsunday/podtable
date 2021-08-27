@@ -5,7 +5,7 @@
         <img src="https://img.shields.io/github/license/inlogicstudio/podtable" alt="License">
     </a>
     <a href="https://github.com/inlogicstudio/podtable">
-        <img src="https://img.shields.io/badge/npm-v1.0.3-blue" alt="Version">
+        <img src="https://img.shields.io/badge/npm-v1.0.4-blue" alt="Version">
     </a>
     <a href="https://github.com/inlogicstudio/podtable">
         <img src="https://img.shields.io/github/issues/inlogicstudio/podtable" alt="Issues">
