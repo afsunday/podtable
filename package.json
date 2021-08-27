@@ -5,7 +5,6 @@
   "author": "Afuwape Sunday <afuwapesunday12@gmail.com>",
   "license": "MIT",
   "private": false,
-  "type": "module",
   "source": "src/index.js",
   "main": "dist/podtable.esm.js",
   "unpkg": "dist/podtable.js",
