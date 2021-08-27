@@ -1,1 +1,1 @@
-export { default as Podtable } from "../podtable";
+export { default as Podtable } from "./podtable";

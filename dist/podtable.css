@@ -31,7 +31,7 @@
     background-repeat: no-repeat;
     background-position: center center;
     transition: transform 0.1s ease-in-out;
-    right: +1.25rem !important;
+    right: +1.15rem !important;
 }
 
 #podtable-container table.show-toggle .toggle::before {

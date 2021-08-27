@@ -2,14 +2,15 @@
 
 <p align="center">
     <a href="https://github.com/inlogicstudio/podtable">
-        <img src="https://img.shields.io/github/issues/inlogicstudio/podtable" alt="Issues">
-    </a>
-    <a href="https://github.com/inlogicstudio/podtable">
-        <img src="https://img.shields.io/badge/npm-v1.0.3-blue" alt="Version">
-    </a>
-    <a href="https://github.com/inlogicstudio/podtable">
         <img src="https://img.shields.io/github/license/inlogicstudio/podtable" alt="License">
     </a>
+    <a href="https://github.com/inlogicstudio/podtable">
+        <img src="https://img.shields.io/badge/npm-v1.0.4-blue" alt="Version">
+    </a>
+    <a href="https://github.com/inlogicstudio/podtable">
+        <img src="https://img.shields.io/github/issues/inlogicstudio/podtable" alt="Issues">
+    </a>
+    
 </p>
 
 ## Podtablejs
@@ -18,7 +19,7 @@ Podtable is a no dependency table library to fit large table dataset into smalll
 
 ## Preview
 
-![podtablejs](https://github.com/inlogicstudio/podtable/blob/dev/art/podtablejs.png)
+![podtablejs](art/podtablejs.png)
 
 ## Installation
 
@@ -126,14 +127,15 @@ new Podtable('#table', {
 Note the function pass to the method option should not be error prone and it must be something fast
 
 ```js
-let el = document.querySelector('#someElement')
 
 new Podtable('#table', {
     keepCell: [1, 6],
     event: true,
-    forCell: [3],
+    forCell: [5],
     method: (event) => {
-        if(event.current === 3 && ! event.isCurrentShown) {
+        let el = document.querySelector('#demo');
+        
+        if (state.current <= 5 && state.isCurrentShown === false) {
             el.style.display = 'block'
         } else {
             el.style.display = 'none'
