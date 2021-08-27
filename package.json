@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/inlogicstudio/podtable",
   "devDependencies": {
+    "eslint": "^7.32.0",
     "microbundle": "^0.13.3"
   }
 }

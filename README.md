@@ -1,20 +1,41 @@
+<p align="center"><img src="/art/code.png" alt="podtable code"></p>
+
+<p align="center">
+    <a href="https://github.com/inlogicstudio/podtable">
+        <img src="https://img.shields.io/github/issues/inlogicstudio/podtable" alt="Issues">
+    </a>
+    <a href="https://github.com/inlogicstudio/podtable">
+        <img src="https://img.shields.io/badge/npm-v1.0.3-blue" alt="Version">
+    </a>
+    <a href="https://github.com/inlogicstudio/podtable">
+        <img src="https://img.shields.io/github/license/inlogicstudio/podtable" alt="License">
+    </a>
+</p>
+
 ## Podtablejs
-A lightweight no dependency responsive table library to fit large table dataset into small screen by making look sweet on mobile
 
-![podtablejs](https://github.com/inlogicstudio/podtable/blob/dev/examples/podtablejs.png)
+Podtable is a no dependency table library to fit large table dataset into smalller device screens with various options on achieving a responsive datatable
 
-**Installation**
+## Preview
 
-there are basically two ways to install podtablejs via npm or download and include via script tag
+![podtablejs](https://github.com/inlogicstudio/podtable/blob/dev/art/podtablejs.png)
 
-Install via npm `npm install podtable` and add stylesheet.
+## Installation
 
+There are basically two ways to install podtablejs via npm or download and include via script tag
+
+* Install via npm `npm install podtable` and add stylesheet.
+* CDN stylsheet `https://unpkg.com/podtable@<VERSION>/dist/podtable.css` 
+* CDN javascript `https://unpkg.com/podtable@<VERSION>/dist/podtable.js`
+* Or Download and reference in your page
+
+
+**By importing**
 ```js
 import { Podtable } from 'podtable';
 ```
 
-Or Download on github and reference in your page
-
+**Or by reference**
 ```html
 <!-- In your page head add stylesheet -->
 <head>
@@ -28,10 +49,11 @@ Or Download on github and reference in your page
 
     <!-- <script src="podtable/dist/podtable.js"></script> -->
 </body>
-
 ```
 
-**Html Markup**
+## Usage
+
+**Html markup**
 
 Your html markup needs to include few things for podtable to work well and the markup should be structure with perceived standard 
 
@@ -62,7 +84,7 @@ Your html markup needs to include few things for podtable to work well and the m
 
 ```
 
-**Usage**
+**Javascript**
 
 ```js
 // script.js or script tag in your html
@@ -120,18 +142,21 @@ new Podtable('#table', {
 });
 
 ```
+
 **Examples**
-See examples in the example folder to get more inspired
+See examples folder [here](examples/index.html) or view it live on [Codepen](https://codepen.io/inlogicstudio/pen/BaZyyGZ)
 
-**Roadmap**
-* Modal as to show hidden cells content
-* Vertical column sorting 
+## Roadmap
+
+* Modal to show hidden cells
+* Column sorting
 * Ajax row rendering
+* Pagination
 
-**Contributing**
+## Contributing
 
-Simply fork the project then send in your pull requests.
+Thank you for considering contributing to Podtablejs You can read the contribution guide [here](.github/CONTRIBUTING.md)
 
-**License**
+## License
 
-Podtablejs is an open source and released under the MIT license.
+Podtablejs is open-sourced software licensed under the [MIT license](LICENSE.md).
