@@ -135,7 +135,7 @@ new Podtable('#table', {
     method: (event) => {
         let el = document.querySelector('#demo');
         
-        if (state.current <= 5 && state.isCurrentShown === false) {
+        if (event.current <= 5 && event.isCurrentShown === false) {
             el.style.display = 'block'
         } else {
             el.style.display = 'none'
