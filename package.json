@@ -13,7 +13,9 @@
     "build": "npm run build:esm && npm run build:umd",
     "build:esm": "microbundle --format esm",
     "build:umd": "microbundle --format umd --name Podtable",
-    "watch": "microbundle watch --format esm"
+    "watch": "microbundle watch --format esm",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "keywords": [
     "HTML table",

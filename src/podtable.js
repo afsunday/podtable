@@ -275,12 +275,12 @@ function Podtable(tableEl, config = {}) {
         let newWindowWidth = window.innerWidth
 
         if (newWindowWidth < oldWindowWidth) {
-            recalc(newWindowWidth)
+            recalc()
 
         } else if (newWindowWidth > oldWindowWidth) {
             if (hiddenCells.length > 0) {
 
-                recalc(newWindowWidth)
+                recalc()
             }
         }    
         oldWindowWidth = newWindowWidth           
@@ -288,9 +288,8 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * Recalculate Cells thats needs to be hidden after flushing
-     * @param {newWindowWidth} newWindowWidth 
      */
-    function recalc(newWindowWidth) {
+    function recalc() {
         flush()
 
         let ilength = constIndex.length
@@ -353,9 +352,9 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * On dynamic node replace:patch essential row attributes will be lost
-     * hence the need to reset attriubtes and re attach necessary events listeners
-     * Also redispatch events but only the attached method
+     * On body rows child list mutation essential row attributes and events
+     * will be lost hence the need to reset attriubtes and re attach necessary 
+     * events listeners and also redispatch cells event but only the attached method
      * @param {String} tableEl 
      */
     function ayncRedraw(tableEl) {
@@ -399,6 +398,7 @@ function Podtable(tableEl, config = {}) {
         }
 
         const observer = new MutationObserver(callback)
+        
         observer.observe(bodyNode, {childList: true })
     }
 
@@ -428,7 +428,7 @@ function Podtable(tableEl, config = {}) {
             try {
                 config.method(_this)
             } catch (error) {
-                console.error(error);
+                console.error(error)
             }
             
         }
