@@ -5,7 +5,7 @@
         <img src="https://img.shields.io/github/license/inlogicstudio/podtable" alt="License">
     </a>
     <a href="https://github.com/inlogicstudio/podtable">
-        <img src="https://img.shields.io/badge/npm-v1.0.4-blue" alt="Version">
+        <img src="https://img.shields.io/badge/npm-v1.0.5-blue" alt="Version">
     </a>
     <a href="https://github.com/inlogicstudio/podtable">
         <img src="https://img.shields.io/github/issues/inlogicstudio/podtable" alt="Issues">
@@ -13,15 +13,15 @@
     
 </p>
 
-## Podtablejs
+# Podtablejs
 
-Podtable is a no dependency table library to fit large table dataset into smalller device screens with various options on achieving a responsive datatable
+Podtable is a no dependency table library to fit large table dataset into smaller device screens with various options on achieving a responsive datatable.
 
-## Preview
+# Preview
 
 ![podtablejs](art/podtablejs.png)
 
-## Installation
+# Installation
 
 There are basically two ways to install podtablejs via npm or download and include via script tag
 
@@ -41,14 +41,15 @@ import { Podtable } from 'podtable';
 <!-- In your page head add stylesheet -->
 <head>
     ...
-    <!-- <link rel="stylesheet" type="text/css" href="podtable/dist/podtable.css"> -->
+
+    <link rel="stylesheet" type="text/css" href="podtable/dist/podtable.css">
 </head>
 
 <!-- At the end of your body tag reference the js script -->
 <body>
     ...
 
-    <!-- <script src="podtable/dist/podtable.js"></script> -->
+    <script src="podtable/dist/podtable.js"></script>
 </body>
 ```
 
@@ -56,11 +57,13 @@ import { Podtable } from 'podtable';
 
 **Html markup**
 
-Your html markup needs to include few things for podtable to work well and the markup should be structure with perceived standard 
+Your html markup needs to include few things for podtable to work well and the markup should be structure with perceived standard.
 
-* A dataset data-grid-colname attributes which value will be the name of the column
+* A dataset data-grid-colname attributes which value will be the name of the column.
 * An empty th, td for head and body element which will serve as control column
-* The control cell must not be hidden with css or push off screen with absolute positioning
+* The control cell must not be hidden with css or push off screen with absolute positioning.
+* Its really important to include the stylesheet because podtable relies on it.
+
 
 ```html
 
@@ -95,7 +98,7 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 ```
-Using ES import
+Using import statement
 
 ```js
 
@@ -105,10 +108,12 @@ new Podtable('#table');
 
 ```
 
-The Podtable instance receive config object with a number of available options to use
+The Podtable instance receive config object with a number of available options to use in making your table responsive.
 
-* The `keepCell` option which is used to specify an array of cells to keep
-Note the first cell for the table with an index of `0` will not be hidden by default
+# V1.0.3, V1.0.4
+
+* `keepCell` which is used to specify an array of cells to keep
+and also note the first cell for the table with an index of `0` will not be hidden by default
 
 ```js
 
@@ -120,11 +125,14 @@ new Podtable('#table', {
 
 * The `event` option which receive a boolean inorder for podtable to emit an event for cells that will hidden
 * The `method` option which takes in the function to  be executed for each cell event and its used in conjuction with the event option.
-* The function passed to the method option receives an event parameter to access the event 
-* `event.current` which is the next cell index to hidden or that will be shown; an integer value
-* `event.isCurrentShown` which is boolean that indicate if the `event.current` is visible or hidden
+* The function passed to the `method` option receives an event parameter to access the event.
 
-Note the function pass to the method option should not be error prone and it must be something fast
+* `event.current` which is the next cell index to hidden or that will be shown and it returns a numeric value.
+
+* `event.isCurrentShown` which is a boolean and it indicates if the `event.current` cell index is visible or hidden.
+
+* The function pass to the method option should not be error prone and not be a long running activity.
+
 
 ```js
 
@@ -145,19 +153,38 @@ new Podtable('#table', {
 
 ```
 
-**Examples**
-See examples folder [here](examples/index.html) or view it live on [Codepen](https://codepen.io/inlogicstudio/pen/BaZyyGZ)
+# V1.0.5
+
+* The `event.isCurrentShown` has been removed.
+
+* `event.current` which now returns the index of the cell that was last hidden
+
+* Added `priority` config option which is an array of priority of how cells will be hidden and if only few cell index are passed to the `priority` config object this will take precedence over the other cell index.
+
+* The `priority` config option be can use together with other availables options
+
+
+The `priority` config object
+```js
+
+new Podtable('#table', {
+    priority: [2,4,5]
+})
+
+```
 
 ## Roadmap
-
-* Modal to show hidden cells
-* Column sorting
-* Ajax row rendering
+* Columns sorting
+* Server side rendering
 * Pagination
+
+## Examples
+
+See examples folder [here](examples/index.html) or view it live on [Codepen](https://codepen.io/inlogicstudio/pen/BaZyyGZ)
 
 ## Contributing
 
-Thank you for considering contributing to Podtablejs You can read the contribution guide [here](.github/CONTRIBUTING.md)
+Thank you for considering to contribute to Podtablejs You can read the contribution guide [here](.github/CONTRIBUTING.md)
 
 ## License
 
