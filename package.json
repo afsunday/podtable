@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": false,
   "source": "src/index.js",
-  "main": "dist/podtable.esm.js",
+  "main": "dist/podtable.js",
   "unpkg": "dist/podtable.js",
   "types": "index.d.ts",
   "scripts": {

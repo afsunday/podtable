@@ -9,14 +9,11 @@ function Podtable(tableEl, config = {}) {
 
     let hiddenCells = []
     let constIndex = [] 
-    let breakPoint = {}
-    let breakPointOffset = {}
     let keepCell = [0]
     let oldWindowWidth = window.innerWidth
     let _this = this
 
     _this.current
-    _this.isCurrentShown = false
 
     setKeepCell(config)
     setToggleCell(tableEl)
@@ -37,17 +34,18 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Add data attribute to elements to serve as index 
-     * Reverse cell index array to hide cells from the back
-     * and make sure the toggle cell is being kept
+     * Add data attribute to elements to serve as cell index and we will
+     * Reverse cell index array to hide cells from the right and also make
+     * sure we reserve the toggle cell from being hidden along with others
      * @param {String} tableEl
      * @returns void 
      */
     function setCellIndex(tableEl) {
         let rows = document.querySelectorAll(`${tableEl} tr`)
+        let tempConst = []
 
         for (let ci = 0; ci < firstBodyRow.children.length; ci++) {
-            constIndex.push(ci)
+            tempConst.push(ci)
         }
 
         for (let i = 0; i < rows.length; i++) {
@@ -58,8 +56,16 @@ function Podtable(tableEl, config = {}) {
             }
         }
 
-        keepCell.push(constIndex.length - 1)
-        constIndex.reverse()
+        if (Object.prototype.hasOwnProperty.call(config, 'priority') &&
+            Array.isArray(config.priority) &&
+            config.priority.length > 0) {
+            
+            constIndex = Array.from(new Set(config.priority.concat(tempConst.reverse())))
+        } else {
+            constIndex = tempConst.reverse()
+        }
+
+        keepCell.push(tempConst.length - 1)
     }
 
     /**
@@ -209,7 +215,7 @@ function Podtable(tableEl, config = {}) {
     /**
      * Check for open child rows to enable reactivity as window resizes
      * apply changes, item are remove and added and every time window resize
-     * hidden elements are redrawn on each toggle
+     * parent child row are redrawn on each toggle
      */
     function childRowListener () {
         let openChildRow = document.querySelectorAll('.child')
@@ -245,15 +251,11 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Hide thw next vertical cells that falls into the maximum squishitude
-     * break point using index from the cells constant index and also set it
-     * own show break point including its own offset
-     * @constant constIndex[index]
+     * Hide the next vertical cells that falls into the maximum squishitude
+     * using index from the cells constant index.
      * @param {Number} index 
      */
-    function hideMain(index, newWindowWidth) {
-        breakPointOffset[`breakOffset${index}`] = newWindowWidth - tableContainer.clientWidth -1
-        breakPoint[`bp${index}`] = firstBodyRow.clientWidth
+    function hideMain(index) {
         hiddenCells.push(index)
         
         document.querySelectorAll(`[data-cell-index="${index}"]`).forEach(el => {
@@ -261,25 +263,7 @@ function Podtable(tableEl, config = {}) {
         })
 
         // onhide dispatch event and send index
-        eventDispatch(false, index)
-    }
-
-    /**
-     * Show the next vertical cells that falls into the maximum squishitude
-     * break point using last cell index from the hiddenCells
-     * @param {Number} lastCellIndex 
-     */
-    function showMain(lastCellIndex) {
-        document.querySelectorAll(`[data-cell-index="${lastCellIndex}"]`).forEach(el => {
-            el.classList.remove('hidden')
-        })
-        
-        delete breakPoint[`bp${lastCellIndex}`]
-        delete breakPointOffset[`breakOffset${lastCellIndex}`]
-        hiddenCells.pop()
-
-        // onDisplay dispatch event and send index
-        eventDispatch(true, lastCellIndex)
+        eventDispatch(index)
     }
 
     /**
@@ -289,40 +273,50 @@ function Podtable(tableEl, config = {}) {
      */
     function resize() {
         let newWindowWidth = window.innerWidth
-        
+
         if (newWindowWidth < oldWindowWidth) {
+            recalc(newWindowWidth)
 
-            for (let i = 0; i < constIndex.length; i++) {
-
-                if (firstBodyRow.clientWidth > tableContainer.clientWidth) {
-                    if(! hiddenCells.includes(constIndex[i])) {
-                        if( ! keepCell.includes(constIndex[i])) {
-                            hideMain(constIndex[i], newWindowWidth)
-                            childRowListener()
-                        }
-                    }
-                }
-            } 
-
-            doTogglerScreen()
-        } else if(newWindowWidth > oldWindowWidth) {
-
+        } else if (newWindowWidth > oldWindowWidth) {
             if (hiddenCells.length > 0) {
-                // cache
-                let len = hiddenCells.length 
 
-                for (let i = 0; i < len; i++) {
-                    let lastCellIndex = hiddenCells.slice(-1)[0]
-
-                    if(newWindowWidth - breakPointOffset[`breakOffset${lastCellIndex}`] >  breakPoint[`bp${lastCellIndex}`]) {
-                        showMain(lastCellIndex)
-                        childRowListener()
-                    }
-                }
-                doTogglerScreen()
+                recalc(newWindowWidth)
             }
         }    
         oldWindowWidth = newWindowWidth           
+    }
+
+    /**
+     * Recalculate Cells thats needs to be hidden after flushing
+     * @param {newWindowWidth} newWindowWidth 
+     */
+    function recalc(newWindowWidth) {
+        flush()
+
+        let ilength = constIndex.length
+        
+        for (let i = 0; i < ilength; i++) {
+
+            if (firstBodyRow.clientWidth > tableContainer.clientWidth) {
+                if (!hiddenCells.includes(constIndex[i])) {
+                    if (!keepCell.includes(constIndex[i])) {
+                        hideMain(constIndex[i])
+                        childRowListener()
+                    } 
+                }
+            }
+        }
+        doTogglerScreen()
+    }
+
+    function flush() {
+        for (let i = 0; i < hiddenCells.length; i++) {
+            document.querySelectorAll(`[data-cell-index="${hiddenCells[i]}"]`).forEach(el => {
+                el.classList.remove('hidden')
+            })
+        }
+
+        hiddenCells = []
     }
 
     /**
@@ -339,7 +333,7 @@ function Podtable(tableEl, config = {}) {
             if (firstBodyRow.clientWidth > tableContainer.clientWidth) {
                 if(! hiddenCells.includes(constIndex[i])) {
                     if (!keepCell.includes(constIndex[i])) {
-                        hideMain(constIndex[i], newWindowWidth)
+                        hideMain(constIndex[i])
                     } 
                 }
             }
@@ -411,31 +405,32 @@ function Podtable(tableEl, config = {}) {
     /**
      * If event is set true which means the user wants to perform an action 
      * for some cells define in the forcell() this methd dispatch the event
-     * @param {Boolean} isShown 
      * @param {Number} index 
      */
-    function eventDispatch(isShown, index) {
+    function eventDispatch(index) {
         if (config.event) {
             if (!Array.isArray(config.forCell) || config.forCell.length < 0) {
                 throw TypeError('forCell must be of type array and not empty')
             }
 
-            _this.isCurrentShown = isShown
             _this.current = index
-
-            if (config.forCell.includes(index)) {
-                shouldPing()
-            }
+            shouldPing()
         }
     }
 
     /**
-     * Call the user attached method only if the event
-     * in the config is present is set to true
+     * Call the user attached method only if the event key is in the config 
+     * object and it is set to true and we will  also wrap the function call 
+     * in a try catch block to avoid code execution failure.
      */
     function shouldPing() {
         if (config.event) {
-            config.method(_this)
+            try {
+                config.method(_this)
+            } catch (error) {
+                console.error(error);
+            }
+            
         }
     }
 
