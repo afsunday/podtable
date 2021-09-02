@@ -75,15 +75,15 @@
 
         new Podtable('#table', {
             keepCell: [1, 6],
+            priority: [2,4,5],
             event: true,
             forCell: [5],
             method: (state) => {
                 let el = document.querySelector('#demo');
 
-                if(state.current <= 5 && state.isCurrentShown === false) {
+                if(state.current <= 5) {
                     el.style.display = 'block'
                 } else {
-                    console.log('is_true')
                     el.style.display = 'none'
                 }
             }
@@ -94,12 +94,13 @@
         window.addEventListener('DOMContentLoaded', () => {
             new Podtable.Podtable('#table', {
                 keepCell: [1, 6],
+                priority: [2,4,5],
                 event: true,
                 forCell: [5],
                 method: (state) => {
                     let el = document.querySelector('#demo');
 
-                    if (state.current <= 5 && state.isCurrentShown === false) {
+                    if(state.current <= 5) {
                         el.style.display = 'block'
                     } else {
                         el.style.display = 'none'
