@@ -183,6 +183,8 @@ Now if you pull podtable by reference via script tag or by using the import stat
 
 
 ```js
+// import Podtable from 'podtable';
+// <script src="podtable/dist/podtable.js"></script> 
 
 new Podtable('#table', {
     // config options
