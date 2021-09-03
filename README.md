@@ -5,7 +5,7 @@
         <img src="https://img.shields.io/github/license/inlogicstudio/podtable" alt="License">
     </a>
     <a href="https://github.com/inlogicstudio/podtable">
-        <img src="https://img.shields.io/badge/npm-v1.0.5-blue" alt="Version">
+        <img src="https://img.shields.io/badge/npm-v1.1.0-blue" alt="Version">
     </a>
     <a href="https://github.com/inlogicstudio/podtable">
         <img src="https://img.shields.io/github/issues/inlogicstudio/podtable" alt="Issues">
@@ -133,7 +133,7 @@ new Podtable('#table', {
 
 * The function pass to the method option should not be error prone and not be a long running activity.
 
-## Available Options
+### Available Options
 * `KeepCell`
 * `event`
 * `forCell`
@@ -159,7 +159,7 @@ new Podtable('#table', {
 
 ```
 
-# V1.0.5
+# V1.1.0
 
 * The `event.isCurrentShown` has been removed.
 
@@ -173,13 +173,13 @@ new Podtable('#table', {
 
 * Now podtable availabe via the 'Podtable' global either by  reference via script tag or by using the import statement
 
-## Available Options
+### Available Options
 * `KeepCell`
 * `priority`
 * `event`
 * `method`
 
-Now if yoyu pull podtable by reference via script tag or by using the import statement podtable instance is now available via the `Podtable` global
+Now if you pull podtable by reference via script tag or by using the import statement podtable instance is now available via the `Podtable` global
 
 
 ```js
