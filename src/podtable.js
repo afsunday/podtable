@@ -37,7 +37,7 @@ function Podtable(tableEl, config = {}) {
      * Add data attribute to elements to serve as cell index and we will
      * Reverse cell index array to hide cells from the right and also make
      * sure we reserve the toggle cell from being hidden along with others
-     * @param {String} tableEl
+     * @param {String} tableElement
      * @returns void 
      */
     function setCellIndex(tableEl) {
@@ -214,8 +214,9 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * Check for open child rows to enable reactivity as window resizes
-     * apply changes, item are remove and added and every time window resize
-     * parent child row are redrawn on each toggle
+     * then apply changes, item are remove and added every time window resize
+     * and its like this so as to get an updated data from the cells
+     * parentrow child row are redrawn on each control toggel.
      */
     function childRowListener () {
         let openChildRow = document.querySelectorAll('.child')
@@ -252,7 +253,8 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * Hide the next vertical cells that falls into the maximum squishitude
-     * using index from the cells constant index.
+     * using index from the cells constant index array and we dispatch an event 
+     * which will take in the currently hidden index for that particular viewport.
      * @param {Number} index 
      */
     function hideMain(index) {
@@ -262,14 +264,15 @@ function Podtable(tableEl, config = {}) {
             el.classList.add('hidden')
         })
 
-        // onhide dispatch event and send index
         eventDispatch(index)
     }
 
     /**
-     * Check if the window resize increases or decreases and determine
-     * which column to show base on the maximum squishitude of cell rows
-     * and call necessary listeners to enable reactivity
+     * Here we will check if the window resize is an increase or decrease 
+     * and determine which column to show base on the maximum squishitude 
+     * of cell rows and also all necessary listeners to enable reactivity. 
+     * when window size increases and there are no hidden cells we will need 
+     * to dispatch event as well that there are currently no hidden cells.
      */
     function resize() {
         let newWindowWidth = window.innerWidth
@@ -279,8 +282,11 @@ function Podtable(tableEl, config = {}) {
 
         } else if (newWindowWidth > oldWindowWidth) {
             if (hiddenCells.length > 0) {
-
                 recalc()
+
+                if (hiddenCells.length <= 0) {
+                    eventDispatch(-1)
+                }
             }
         }    
         oldWindowWidth = newWindowWidth           
@@ -291,10 +297,8 @@ function Podtable(tableEl, config = {}) {
      */
     function recalc() {
         flush()
-
-        let ilength = constIndex.length
         
-        for (let i = 0; i < ilength; i++) {
+        for (let i = 0; i < constIndex.length; i++) {
 
             if (firstBodyRow.clientWidth > tableContainer.clientWidth) {
                 if (!hiddenCells.includes(constIndex[i])) {
@@ -305,9 +309,14 @@ function Podtable(tableEl, config = {}) {
                 }
             }
         }
+        
         doTogglerScreen()
     }
 
+    /**
+     * Here we remove the hidden class and flush the hidden cells 
+     * array so as to restart procedure for the current viewport.
+     */
     function flush() {
         for (let i = 0; i < hiddenCells.length; i++) {
             document.querySelectorAll(`[data-cell-index="${hiddenCells[i]}"]`).forEach(el => {
@@ -319,8 +328,8 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Dom mounted|window load calc and do visiibility including
-     * necessary listeners
+     * On page load calculate cells which  can fit into the current
+     * maximum squishitude: apply visibility, attach necessary listeners.
      */
     function mount() {
         hiddenCells = []
@@ -403,19 +412,14 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * If event is set true which means the user wants to perform an action 
-     * for some cells define in the forcell() this methd dispatch the event
+     * For every cells hidden this method will be called which check
+     * if events want to be received also attach hidden index to return object.
      * @param {Number} index 
      */
     function eventDispatch(index) {
-        if (config.event) {
-            if (!Array.isArray(config.forCell) || config.forCell.length < 0) {
-                throw TypeError('forCell must be of type array and not empty')
-            }
+        _this.current = index
 
-            _this.current = index
-            shouldPing()
-        }
+        if (config.event) { shouldPing() }
     }
 
     /**
@@ -430,7 +434,6 @@ function Podtable(tableEl, config = {}) {
             } catch (error) {
                 console.error(error)
             }
-            
         }
     }
 

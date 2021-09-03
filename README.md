@@ -133,6 +133,12 @@ new Podtable('#table', {
 
 * The function pass to the method option should not be error prone and not be a long running activity.
 
+## Available Options
+* `KeepCell`
+* `event`
+* `forCell`
+* `method`
+
 
 ```js
 
@@ -157,21 +163,44 @@ new Podtable('#table', {
 
 * The `event.isCurrentShown` has been removed.
 
+* The `forCell` option has been removed as event will be dispatched for every cell hidden only if `event` is set to true
+
 * `event.current` which now returns the index of the cell that was last hidden
 
 * Added `priority` config option which is an array of priority of how cells will be hidden and if only few cell index are passed to the `priority` config object this will take precedence over the other cell index.
 
 * The `priority` config option be can use together with other availables options
 
+* Now podtable availabe via the 'Podtable' global either by  reference via script tag or by using the import statement
+
+## Available Options
+* `KeepCell`
+* `priority`
+* `event`
+* `method`
+
+Now if yoyu pull podtable by reference via script tag or by using the import statement podtable instance is now available via the `Podtable` global
+
+
+```js
+
+new Podtable('#table', {
+    // config options
+})
+
+```
 
 The `priority` config object
 ```js
 
 new Podtable('#table', {
     priority: [2,4,5]
+    // ... other config options
 })
 
 ```
+
+# Miscellaneous
 
 ## Roadmap
 * Columns sorting

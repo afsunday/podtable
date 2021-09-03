@@ -1,1 +1,2 @@
-export { default as Podtable } from "./podtable";
+import Podtable from "./index"
+export default Podtable
