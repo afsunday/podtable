@@ -220,11 +220,14 @@ new Podtable('#table', {
 Thank you for considering to contribute to Podtablejs below is a quick guide
 
 * clone this repo locally
-* run `npm install` & `npm run build` || `npm run watch`
+* run `npm install` to dependencies
+
 * Include the `podtable/dist/podtable.js` file from a `<script>` tag on a webpage
 * Include the  `podtable/dist/podtable.css` from `<link>` tag on a webpage
-* pull requests, is recommend not just bug reports 
-* And you're set to go
+* run `npm run build` or `npm run watch` to start seeing changes made to the code
+
+* Pull requests, is recommend not just bug reports 
+* And you're set to go &#128079;
 
 
 # Miscellaneous
