@@ -95,24 +95,18 @@
 
     <script>  
         window.addEventListener('DOMContentLoaded', () => {
-            new Podtable.Podtable('#table', {
+            new Podtable('#table', {
                 keepCell: [1, 6],
                 priority: [2,4,5],
                 event: true,
                 method: (state) => {
-                    let el = document.querySelectorAll('.demo')
+                    let el = document.querySelector('.demo');
 
                     if(state.current == 5) {
-                        el.forEach((n) => {
-                            n.style.display = 'block'
-                        }) 
+                        el.style.display = 'block'
                     } else {
-                        el.forEach((n) => {
-                            n.style.display = 'none'
-                        })
+                        el.style.display = 'none'
                     }
-
-                    console.log(state)
                 }
             })
         })
@@ -121,7 +115,7 @@
         const vue = new Vue({
             el: '#app',
             data: {
-                rows: 10,
+                rows: 50,
             },
             methods: {
                 addRow() {
