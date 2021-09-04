@@ -22,7 +22,7 @@
             vertical-align: middle;
         }
 
-        #demo {
+        .demo {
             display: none;
         }
     </style>
@@ -52,7 +52,7 @@
                     <tr v-for="row in rows">
                         <td data-grid-colname="Firstname">
                             Mark
-                            <div id="demo">this is an extra-content for this cell on mobile</div>
+                            <div class="demo">this is an extra-content for this cell on mobile</div>
                         </td>
                         <td data-grid-colname="Lastname">Spencer</td>
                         <td data-grid-colname="Gender">Male</td>
@@ -78,12 +78,16 @@
             priority: [2,4,5],
             event: true,
             method: (state) => {
-                let el = document.querySelector('#demo');
+                let el = document.querySelectorAll('.demo')
 
                 if(state.current == 5) {
-                    el.style.display = 'block'
+                    el.forEach((n) => {
+                        n.style.display = 'block'
+                    }) 
                 } else {
-                    el.style.display = 'none'
+                    el.forEach((n) => {
+                        n.style.display = 'none'
+                    })
                 }
             }
         })
@@ -96,12 +100,16 @@
                 priority: [2,4,5],
                 event: true,
                 method: (state) => {
-                    let el = document.querySelector('#demo');
+                    let el = document.querySelectorAll('.demo')
 
                     if(state.current == 5) {
-                        el.style.display = 'block'
+                        el.forEach((n) => {
+                            n.style.display = 'block'
+                        }) 
                     } else {
-                        el.style.display = 'none'
+                        el.forEach((n) => {
+                            n.style.display = 'none'
+                        })
                     }
                 }
             })

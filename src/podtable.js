@@ -216,7 +216,7 @@ function Podtable(tableEl, config = {}) {
      * Check for open child rows to enable reactivity as window resizes
      * then apply changes, item are remove and added every time window resize
      * and its like this so as to get an updated data from the cells
-     * parentrow child row are redrawn on each control toggel.
+     * parent row child row are redrawn on each control toggel.
      */
     function childRowListener () {
         let openChildRow = document.querySelectorAll('.child')
@@ -286,6 +286,7 @@ function Podtable(tableEl, config = {}) {
 
                 if (hiddenCells.length <= 0) {
                     eventDispatch(-1)
+                    childRowListener()
                 }
             }
         }    

@@ -1,2 +1,2 @@
-import Podtable from "./index"
-export default Podtable
+export default Podtable;
+import Podtable from "./podtable";
