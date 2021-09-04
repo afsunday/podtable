@@ -17,12 +17,12 @@
 
 Podtable is a no dependency table library to fit large table dataset into smaller device screens with various options on achieving a responsive datatable.
 
-- [**Preview**](#Preview)
-- [**Installation**](#Installation)
-- [**Usage**](#Usage)
-- [**1.0.3, V1.0.4**](#v103v104)
+- [**Preview**](#preview)
+- [**Installation**](#installation)
+- [**Usage**](#usage)
+- [**V1.0.3, V1.0.4**](#v103-v104)
 - [**V1.1.0**](#v110)
-- [**Miscellaneous**](#Miscellaneous)
+- [**Miscellaneous**](#miscellaneous)
 
 # Preview
 
