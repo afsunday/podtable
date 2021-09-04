@@ -60,7 +60,7 @@ import { Podtable } from 'podtable';
 </body>
 ```
 
-## Usage
+# Usage
 
 **Html markup**
 
