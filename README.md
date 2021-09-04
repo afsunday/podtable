@@ -20,9 +20,15 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 - [**Preview**](#preview)
 - [**Installation**](#installation)
 - [**Usage**](#usage)
+    - [**Html Markup**](#html-markup)
+    - [**Javascript**](#javascript)
 - [**V1.0.3, V1.0.4**](#v103-v104)
 - [**V1.1.0**](#v110)
+- [**Contributing**](#contributing)
 - [**Miscellaneous**](#miscellaneous)
+    - [**Examples**](#examples)
+    - [**Roadmap**](#roadmap)
+
 
 # Preview
 
@@ -62,7 +68,7 @@ import { Podtable } from 'podtable';
 
 # Usage
 
-**Html markup**
+### Html markup
 
 Your html markup needs to include few things for podtable to work well and the markup should be structure with perceived standard.
 
@@ -95,7 +101,7 @@ Your html markup needs to include few things for podtable to work well and the m
 
 ```
 
-**Javascript**
+### Javascript
 
 ```js
 // script.js or script tag in your html
@@ -209,20 +215,28 @@ new Podtable('#table', {
 
 ```
 
-# Miscellaneous
+# Contributing
 
-## Roadmap
-* Columns sorting
-* Server side rendering
-* Pagination
+Thank you for considering to contribute to Podtablejs below is a quick guide
+
+* clone this repo locally
+* run `npm install` & `npm run build` || `npm run watch`
+* Include the `podtable/dist/podtable.js` file from a `<script>` tag on a webpage
+* Include the  `podtable/dist/podtable.css` from `<link>` tag on a webpage
+* And you're set to go
+   
+To encourage active collaboration i recommend pull requests, not just bug reports thanks for contributing.
+
+# Miscellaneous
 
 ## Examples
 
 See examples folder [here](examples/index.html) or view it live on [Codepen](https://codepen.io/inlogicstudio/pen/BaZyyGZ)
 
-## Contributing
-
-Thank you for considering to contribute to Podtablejs You can read the contribution guide [here](.github/CONTRIBUTING.md)
+## Roadmap
+* Columns sorting
+* Server side rendering
+* Pagination
 
 ## License
 
