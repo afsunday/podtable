@@ -17,6 +17,13 @@
 
 Podtable is a no dependency table library to fit large table dataset into smaller device screens with various options on achieving a responsive datatable.
 
+- [**Preview**](#Preview)
+- [**Installation**](#Installation)
+- [**Usage**](#Usage)
+- [**1.0.3, V1.0.4**](#V1.0.3,V1.0.4)
+- [**V1.1.0**](#V1.1.0)
+- [**Miscellaneous**](#Miscellaneous)
+
 # Preview
 
 ![podtablejs](art/podtablejs.png)
@@ -110,7 +117,7 @@ new Podtable('#table');
 
 The Podtable instance receive config object with a number of available options to use in making your table responsive.
 
-# V1.0.3, V1.0.4
+# V1.0.3,V1.0.4
 
 * `keepCell` which is used to specify an array of cells to keep
 and also note the first cell for the table with an index of `0` will not be hidden by default
