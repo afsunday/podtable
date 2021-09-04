@@ -184,7 +184,7 @@ new Podtable('#table', {
 
 * The `priority` config option be can use together with other availables options
 
-* Now podtable availabe via the 'Podtable' global either by  reference via script tag or by using the import statement
+* podtable is now availabe via the `Podtable` global either by  reference via script tag or by using the import statement
 
 ### Available Options
 * `KeepCell`
@@ -223,15 +223,16 @@ Thank you for considering to contribute to Podtablejs below is a quick guide
 * run `npm install` & `npm run build` || `npm run watch`
 * Include the `podtable/dist/podtable.js` file from a `<script>` tag on a webpage
 * Include the  `podtable/dist/podtable.css` from `<link>` tag on a webpage
+* pull requests, is recommend not just bug reports 
 * And you're set to go
-   
-To encourage active collaboration i recommend pull requests, not just bug reports thanks for contributing.
+
 
 # Miscellaneous
 
 ## Examples
 
-See examples folder [here](examples/index.html) or view it live on [Codepen](https://codepen.io/inlogicstudio/pen/BaZyyGZ)
+* See examples folder [here](examples/index.html) on this repo
+* View it live on [Codepen](https://codepen.io/inlogicstudio/pen/BaZyyGZ) and this example is base on `V1.0.*`
 
 ## Roadmap
 * Columns sorting
