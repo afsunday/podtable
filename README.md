@@ -205,6 +205,14 @@ new Podtable('#table', {
 
 ```
 
+Using the import statement should now be done like this
+
+```js
+
+import Podtable from 'podtable';
+
+```
+
 The `priority` config object
 ```js
 
