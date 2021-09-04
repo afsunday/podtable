@@ -95,7 +95,7 @@
 
     <script>  
         window.addEventListener('DOMContentLoaded', () => {
-            new Podtable('#table', {
+            new Podtable.Podtable('#table', {
                 keepCell: [1, 6],
                 priority: [2,4,5],
                 event: true,
@@ -111,6 +111,8 @@
                             n.style.display = 'none'
                         })
                     }
+
+                    console.log(state)
                 }
             })
         })

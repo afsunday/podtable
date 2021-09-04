@@ -239,7 +239,8 @@ function Podtable(tableEl, config = {}) {
                 }
 
                 // we will remove the existing child row and put another one with new data
-                // we also check if the hidden cells length > 0 so as to avoid empty child rows
+                // we also check if the hidden cells length > 0 before inserting a new child row
+                // so as to avoid empty child rows and orphaned child rows
                 openChildParent[ix].nextElementSibling.remove()
                 
                 if(hiddenCells.length > 0) {
@@ -279,15 +280,14 @@ function Podtable(tableEl, config = {}) {
 
         if (newWindowWidth < oldWindowWidth) {
             recalc()
+            childRowListener()
 
         } else if (newWindowWidth > oldWindowWidth) {
-            if (hiddenCells.length > 0) {
-                recalc()
+            recalc()
 
-                if (hiddenCells.length <= 0) {
-                    eventDispatch(-1)
-                    childRowListener()
-                }
+            if (hiddenCells.length <= 0) {
+                eventDispatch(-1)
+                childRowListener()
             }
         }    
         oldWindowWidth = newWindowWidth           
