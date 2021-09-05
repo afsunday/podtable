@@ -2,10 +2,13 @@
 
 <p align="center">
     <a href="https://github.com/inlogicstudio/podtable">
-        <img src="https://img.shields.io/github/license/inlogicstudio/podtable" alt="License">
+        <img src="https://badgen.net/github/license/inlogicstudio/podtable?color=green" alt="License">
     </a>
     <a href="https://www.npmjs.com/package/podtable">
-        <img src="https://img.shields.io/badge/npm-v1.1.0-blue" alt="Version">
+        <img src="https://badgen.net/npm/v/podtable?color=red" alt="Version">
+    </a>
+    <a href="https://www.npmjs.com/package/podtable">
+        <img src="https://badgen.net/npm/dt/podtable" alt="Downloads">
     </a>
     <a href="https://github.com/inlogicstudio/podtable">
         <img src="https://img.shields.io/github/issues/inlogicstudio/podtable" alt="Issues">
