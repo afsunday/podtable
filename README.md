@@ -23,8 +23,6 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 - [**Preview**](#preview)
 - [**Installation**](#installation)
 - [**Usage**](#usage)
-    - [**Html Markup**](#html-markup)
-    - [**Javascript**](#javascript)
 - [**V1.0.3, V1.0.4**](#v103-v104)
 - [**V1.1.0**](#v110)
 - [**Contributing**](#contributing)
@@ -47,28 +45,6 @@ There are basically two ways to install podtablejs via npm or download and inclu
 * Or Download and reference in your page
 
 
-**By importing**
-```js
-import { Podtable } from 'podtable';
-```
-
-**Or by reference**
-```html
-<!-- In your page head add stylesheet -->
-<head>
-    ...
-
-    <link rel="stylesheet" type="text/css" href="podtable/dist/podtable.css">
-</head>
-
-<!-- At the end of your body tag reference the js script -->
-<body>
-    ...
-
-    <script src="podtable/dist/podtable.js"></script>
-</body>
-```
-
 # Usage
 
 ### Html markup
@@ -80,6 +56,7 @@ Your html markup needs to include few things for podtable to work well and the m
 * The control cell must not be hidden with css or push off screen with absolute positioning.
 * Its really important to include the stylesheet because podtable relies on it.
 
+continue to read below for version specfic usage
 
 ```html
 
@@ -104,19 +81,19 @@ Your html markup needs to include few things for podtable to work well and the m
 
 ```
 
-### Javascript
+# V1.0.3, V1.0.4
 
 ```js
-// script.js or script tag in your html
+// If you made reference via script tag use this way
 
 window.addEventListener('DOMContentLoaded', () => {
     new Podtable.Podtable('#table');
 })
 
 ```
-Using import statement
 
 ```js
+// Using import the statement use this way
 
 import { Podtable } from 'podtable';
 
@@ -124,9 +101,8 @@ new Podtable('#table');
 
 ```
 
-The Podtable instance receive config object with a number of available options to use in making your table responsive.
 
-# V1.0.3, V1.0.4
+The Podtable instance receive config object with a number of available options to use in making your table responsive.
 
 * `keepCell` which is used to specify an array of cells to keep
 and also note the first cell for the table with an index of `0` will not be hidden by default

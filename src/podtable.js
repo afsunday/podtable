@@ -1,6 +1,20 @@
 function Podtable(tableEl, config = {}) {
     let table = document.querySelector(tableEl)
-    let firstBodyRow = document.querySelector(`${tableEl} tbody tr`)
+    let targetRow
+    let errorMessage
+
+    /**
+     * Perform an health check and if check fails we will throw an error
+     * but if its case empty tbody rows then we will assume no data 
+     * and we then select the right element for target row
+     */
+    if (healthCheck(table) === false) {
+        throw new Error(errorMessage)
+    } else if (healthCheck(table) === -1) {
+        targetRow = document.querySelector(`${tableEl} thead tr`)
+    } else if (healthCheck(table)) {
+        targetRow = document.querySelector(`${tableEl} tbody tr`)
+    }
 
     let tableContainer = document.createElement('div')
     tableContainer.setAttribute('id', 'podtable-container')
@@ -21,6 +35,39 @@ function Podtable(tableEl, config = {}) {
 
     render()
     ayncRedraw(tableEl)
+
+    /**
+     * Performs an Health check on the target table
+     * @param {HTMLTableElement} table 
+     * @returns Boolean
+     */
+    function healthCheck(table) {
+        if (table === null) {
+            errorMessage = 'Unable to access target HTMLTableElement'
+            return false
+        }
+
+        if (!(table instanceof HTMLTableElement)) {
+            errorMessage = 'Element is not a HTMLTableElement'
+            return false
+        }
+
+        if (table.tHead === null) {
+            errorMessage = 'Table should have only one THEAD'
+            return false
+        }
+
+        if (table.tBodies.length <= 0) {
+            errorMessage = 'Table should have only one TBODY'
+            return false
+        }
+
+        if (table.tBodies[0].rows.length <= 0) {
+            return -1
+        }
+
+        return true
+    }
 
     /**
      * Add css class to control cells
@@ -44,7 +91,7 @@ function Podtable(tableEl, config = {}) {
         let rows = document.querySelectorAll(`${tableEl} tr`)
         let tempConst = []
 
-        for (let ci = 0; ci < firstBodyRow.children.length; ci++) {
+        for (let ci = 0; ci < targetRow.children.length; ci++) {
             tempConst.push(ci)
         }
 
@@ -84,7 +131,7 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * Create tr element and append cell column data
-     * @param {} cells 
+     * @param {HTMLCollection} cells 
      * @returns Element Node
      */
     function childRow (cells) {
@@ -109,7 +156,7 @@ function Podtable(tableEl, config = {}) {
     /**
      * Create grid column div Element to append to child row
      * @param {el} el
-     * @returns 
+     * @returns Element Node
      */
     function gridCol(el) {
         let gridCol = document.createElement('div')
@@ -139,13 +186,13 @@ function Podtable(tableEl, config = {}) {
         } else {
             parent.classList.add('has-child')
             let isHidden = []
-            for (let el in parent.children) {
-                if(typeof parent.children[el].classList !== 'undefined' && parent.children[el].classList.contains('hidden')) {
-                    isHidden.push(gridCol(parent.children[el]))
+            for (let i = 0; i < parent.cells.length; i++) {
+                if (parent.cells[i].classList.contains('hidden')) {
+                    isHidden.push(gridCol(parent.cells[i]))
                 }
             }
 
-            parent.after(childRow(isHidden))
+            parent.parentNode.insertBefore(childRow(isHidden), parent.nextSibling);
         }
     }
 
@@ -280,7 +327,7 @@ function Podtable(tableEl, config = {}) {
 
         if (newWindowWidth < oldWindowWidth) {
             recalc()
-            childRowListener()
+            // childRowListener()
 
         } else if (newWindowWidth > oldWindowWidth) {
             recalc()
@@ -300,8 +347,7 @@ function Podtable(tableEl, config = {}) {
         flush()
         
         for (let i = 0; i < constIndex.length; i++) {
-
-            if (firstBodyRow.clientWidth > tableContainer.clientWidth) {
+            if (targetRow.clientWidth > tableContainer.clientWidth) {
                 if (!hiddenCells.includes(constIndex[i])) {
                     if (!keepCell.includes(constIndex[i])) {
                         hideMain(constIndex[i])
@@ -339,7 +385,7 @@ function Podtable(tableEl, config = {}) {
         
         for (let i = 0; i < ilength; i++) {
 
-            if (firstBodyRow.clientWidth > tableContainer.clientWidth) {
+            if (targetRow.clientWidth > tableContainer.clientWidth) {
                 if(! hiddenCells.includes(constIndex[i])) {
                     if (!keepCell.includes(constIndex[i])) {
                         hideMain(constIndex[i])
@@ -379,14 +425,6 @@ function Podtable(tableEl, config = {}) {
             }
         }
 
-        function hideCells() {
-            for (let i = 0; i < hiddenCells.length; i++) {
-                document.querySelectorAll(`[data-cell-index="${hiddenCells[i]}"]`).forEach(el => {
-                    el.classList.add('hidden')
-                })
-            }
-        }
-
         const callback = (mutationList, observer) => {
             for (const mutation of mutationList) {
                 if (mutation.type === 'childList' && mutation.addedNodes.length === 1) {
@@ -403,13 +441,19 @@ function Podtable(tableEl, config = {}) {
                 }
             }
 
-            hideCells()
-            firstBodyRow = document.querySelector(`${table.id} tbody tr`)
+            if (document.querySelector(`${tableEl} tbody`).rows.length <= 0) {
+                targetRow = document.querySelector(`${tableEl} thead tr`)
+            } else {
+                targetRow = document.querySelector(`${tableEl} tbody tr`)
+            }
+
+            flush()
+            mount()
         }
 
         const observer = new MutationObserver(callback)
-        
-        observer.observe(bodyNode, {childList: true })
+
+        observer.observe(bodyNode, { childList: true })
     }
 
     /**
