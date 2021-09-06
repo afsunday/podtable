@@ -93,7 +93,7 @@ window.addEventListener('DOMContentLoaded', () => {
 ```
 
 ```js
-// Using import the statement use this way
+// Using the import statement use this way
 
 import { Podtable } from 'podtable';
 
