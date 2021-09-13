@@ -23,8 +23,8 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 - [**Preview**](#preview)
 - [**Installation**](#installation)
 - [**Usage**](#usage)
-- [**V1.0.3, V1.0.4**](#v103-v104)
 - [**V1.1.0**](#v110)
+- [**V1.0.***](#v10)
 - [**Contributing**](#contributing)
 - [**Miscellaneous**](#miscellaneous)
     - [**Examples**](#examples)
@@ -47,16 +47,20 @@ There are basically two ways to install podtablejs via npm or download and inclu
 
 # Usage
 
-### Html markup
+### HTML markup
 
 Your html markup needs to include few things for podtable to work well and the markup should be structure with perceived standard.
 
-* A dataset data-grid-colname attributes which value will be the name of the column.
-* An empty th, td for head and body element which will serve as control column
+* A data attribute `data-grid-colname` which value will be the name of the column.
+
+* All table body rows should have the `data-grid-colname` attributes.
+
+* An empty th, td at the end of the table row element which will serve as control column.
+
 * The control cell must not be hidden with css or push off screen with absolute positioning.
+
 * Its really important to include the stylesheet because podtable relies on it.
 
-continue to read below for version specfic usage
 
 ```html
 
@@ -65,7 +69,7 @@ continue to read below for version specfic usage
         <tr>
             <th>Firstname</th>
             <th>Lastname</th>
-               ...
+            ...
             <th></th>
         </tr>
     </thead>
@@ -73,7 +77,7 @@ continue to read below for version specfic usage
         <tr>
             <td data-grid-colname="Firstname">Mark</td>
             <td data-grid-colname="Lastname">Spencer</td>
-               ...
+            ...
             <td></td>
         </tr>
     </tbody>
@@ -81,49 +85,79 @@ continue to read below for version specfic usage
 
 ```
 
-# V1.0.3, V1.0.4
+# V1.1.0
 
+Reference via the script tag
 ```js
-// If you made reference via script tag use this way
+<script src="podtable/dist/podtable.js"></script> 
 
-window.addEventListener('DOMContentLoaded', () => {
-    new Podtable.Podtable('#table');
+new Podtable('#table', {
+    keepCell: [1, 6]
+    // ... other config options
 })
 
 ```
 
-```js
-// Using the import statement use this way
-
-import { Podtable } from 'podtable';
-
-new Podtable('#table');
-
-```
-
-
-The Podtable instance receive config object with a number of available options to use in making your table responsive.
-
-* `keepCell` which is used to specify an array of cells to keep
-and also note the first cell for the table with an index of `0` will not be hidden by default
+Using the import statement 
 
 ```js
+
+import Podtable from 'podtable';
 
 new Podtable('#table', {
     keepCell: [1, 6]
-});
+    // ... other config options
+})
 
 ```
 
-* The `event` option which receive a boolean inorder for podtable to emit an event for cells that will hidden
-* The `method` option which takes in the function to  be executed for each cell event and its used in conjuction with the event option.
-* The function passed to the `method` option receives an event parameter to access the event.
+The podtable instance receives a number of config option in achieving a responsive table which can be use together or as your use case demands.
 
-* `event.current` which is the next cell index to hidden or that will be shown and it returns a numeric value.
+#### Available Options
 
-* `event.isCurrentShown` which is a boolean and it indicates if the `event.current` cell index is visible or hidden.
+* `KeepCell`
+* `priority`
+* `event`
+* `method`
 
-* The function pass to the method option should not be error prone and not be a long running activity.
+The `keepCell` which is used to specify an array of cells to keep
+and also note the first cell for the table with an index of `0` will not be hidden by default.
+
+```js
+new Podtable('#table', {
+    keepCell: [1, 6],
+});
+```
+
+The `priority` config option which is an array of priority of how cells will be hidden and if only few cell index are passed to the `priority` config object this will take precedence over the other cell index.
+
+```js
+new Podtable('#table', {
+    priority: [2, 4, 5]
+})
+```
+The `event` and `method` config option which is meant to be used together, the `event` option accepts a boolean inorder for podtable to emit an event and `method` option which takes in a function to be executed for the hidden cells. and the function receives a parameter to acess the index of the cell that was last hidden.
+
+```js
+new Podtable('#table', {
+    event: true,
+    method: (state) => {
+        let el = document.querySelectorAll('.demo')
+
+        if(state.current == 5) {
+            el.forEach((n) => {
+                n.style.display = 'block'
+            }) 
+        } else {
+            el.forEach((n) => {
+                n.style.display = 'none'
+            })
+        }
+    }
+});
+```
+
+# V1.0.*
 
 ### Available Options
 * `KeepCell`
@@ -132,86 +166,14 @@ new Podtable('#table', {
 * `method`
 
 
-```js
-
-new Podtable('#table', {
-    keepCell: [1, 6],
-    event: true,
-    forCell: [5],
-    method: (event) => {
-        let el = document.querySelector('#demo');
-        
-        if (event.current <= 5 && event.isCurrentShown === false) {
-            el.style.display = 'block'
-        } else {
-            el.style.display = 'none'
-        }
-    }
-});
-
-```
-
-# V1.1.0
-
-* The `event.isCurrentShown` has been removed.
-
-* The `forCell` option has been removed as event will be dispatched for every cell hidden only if `event` is set to true
-
-* `event.current` which now returns the index of the cell that was last hidden
-
-* Added `priority` config option which is an array of priority of how cells will be hidden and if only few cell index are passed to the `priority` config object this will take precedence over the other cell index.
-
-* The `priority` config option be can use together with other availables options
-
-* podtable is now availabe via the `Podtable` global either by  reference via script tag or by using the import statement
-
-### Available Options
-* `KeepCell`
-* `priority`
-* `event`
-* `method`
-
-Now if you pull podtable by reference via script tag or by using the import statement podtable instance is now available via the `Podtable` global
-
-
-```js
-// import Podtable from 'podtable';
-// <script src="podtable/dist/podtable.js"></script> 
-
-new Podtable('#table', {
-    // config options
-})
-
-```
-
-Using the import statement should now be done like this
-
-```js
-
-import Podtable from 'podtable';
-
-```
-
-The `priority` config object
-```js
-
-new Podtable('#table', {
-    priority: [2,4,5]
-    // ... other config options
-})
-
-```
-
 # Contributing
 
 Thank you for considering to contribute to Podtablejs below is a quick guide
 
 * clone this repo locally
-* run `npm install` to dependencies
 
 * Include the `podtable/dist/podtable.js` file from a `<script>` tag on a webpage
 * Include the  `podtable/dist/podtable.css` from `<link>` tag on a webpage
-* run `npm run build` or `npm run watch` to start seeing changes made to the code
 
 * Pull requests, is recommend not just bug reports 
 * And you're set to go &#128079;
@@ -219,16 +181,14 @@ Thank you for considering to contribute to Podtablejs below is a quick guide
 
 # Miscellaneous
 
-## Examples
+### Examples
 
 * See examples folder [here](examples/index.html) on this repo
 * View it live on [Codepen](https://codepen.io/inlogicstudio/pen/BaZyyGZ) and this example is base on `V1.0.*`
 
-## Roadmap
-* Columns sorting
-* Server side rendering
-* Pagination
+### Roadmap
+More awesomeness in achieving a responsive datatable. &#128522;
 
-## License
+### License
 
 Podtablejs is open-sourced software licensed under the [MIT license](LICENSE.md).

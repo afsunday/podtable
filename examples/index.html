@@ -100,12 +100,16 @@
                 priority: [2,4,5],
                 event: true,
                 method: (state) => {
-                    let el = document.querySelector('.demo');
+                    let el = document.querySelectorAll('.demo');
 
                     if(state.current == 5) {
-                        el.style.display = 'block'
+                        el.forEach((n) => {
+                            n.style.display = 'block'
+                        }) 
                     } else {
-                        el.style.display = 'none'
+                        el.forEach((n) => {
+                            n.style.display = 'none'
+                        })
                     }
                 }
             })

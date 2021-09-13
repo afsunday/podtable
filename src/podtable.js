@@ -178,6 +178,8 @@ function Podtable(tableEl, config = {}) {
      * @param {event} event
      */
     function toggle(e) {
+        if (hiddenCells.length <= 0) { return }
+        
         let parent = e.target.parentElement
 
         if(parent.classList.contains('has-child')) {
@@ -202,6 +204,8 @@ function Podtable(tableEl, config = {}) {
      * @param {event} event
      */
     function toggleAll(e) {
+        if (hiddenCells.length <= 0) { return }
+
         let toggleEls = document.querySelectorAll('.toggle')
         let toggler = e.currentTarget
 
