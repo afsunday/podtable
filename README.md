@@ -10,10 +10,6 @@
     <a href="https://www.npmjs.com/package/podtable">
         <img src="https://badgen.net/npm/dt/podtable" alt="Downloads">
     </a>
-    <a href="https://github.com/inlogicstudio/podtable">
-        <img src="https://img.shields.io/github/issues/inlogicstudio/podtable" alt="Issues">
-    </a>
-    
 </p>
 
 # Podtablejs
