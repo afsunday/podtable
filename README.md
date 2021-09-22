@@ -19,8 +19,7 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 - [**Preview**](#preview)
 - [**Installation**](#installation)
 - [**Usage**](#usage)
-- [**V1.1.0**](#v110)
-- [**V1.0.***](#v10)
+- [**Versions**](#versions)
 - [**Contributing**](#contributing)
 - [**Miscellaneous**](#miscellaneous)
     - [**Examples**](#examples)
@@ -29,7 +28,9 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 
 # Preview
 
-![podtablejs](art/podtablejs.png)
+<p align="center">
+    <img src="art/podtablejs.png" alt="podtablejs">
+</p>
 
 # Installation
 
@@ -80,8 +81,6 @@ Your html markup needs to include few things for podtable to work well and the m
 </table>
 
 ```
-
-# V1.1.0
 
 Reference via the script tag
 ```js
@@ -153,9 +152,12 @@ new Podtable('#table', {
 });
 ```
 
-# V1.0.*
+# Versions
 
-### Available Options
+### Available options
+
+#### V1.0.*
+
 * `KeepCell`
 * `event`
 * `forCell`
