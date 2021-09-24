@@ -24,9 +24,8 @@ function Podtable(tableEl, config = {}) {
     let hiddenCells = []
     let constIndex = [] 
     let keepCell = [0]
-    let oldWindowWidth = window.innerWidth
-    let _this = this
 
+    let _this = this
     _this.current
 
     setKeepCell(config)
@@ -164,7 +163,7 @@ function Podtable(tableEl, config = {}) {
     
         let dataColName = document.createElement('div')
         let dataColDesc = document.createElement('div')
-        dataColName.innerHTML = el.dataset.gridColname
+        dataColName.innerHTML = table.tHead.rows[0].cells[el.cellIndex].innerHTML
         dataColDesc.innerHTML = el.innerHTML
     
         gridCol.append(dataColName)
@@ -267,7 +266,7 @@ function Podtable(tableEl, config = {}) {
      * Check for open child rows to enable reactivity as window resizes
      * then apply changes, item are remove and added every time window resize
      * and its like this so as to get an updated data from the cells
-     * parent row child row are redrawn on each control toggel.
+     * parent row child row are redrawn on each control toggle.
      */
     function childRowListener () {
         let openChildRow = document.querySelectorAll('.child')
@@ -280,22 +279,22 @@ function Podtable(tableEl, config = {}) {
             }
 
             // Iterate from parents elements down to child elements
-            for (let ix = 0; ix < openChildParent.length; ix++) {
+            for (let p = 0; p < openChildParent.length; p++) {
                 let isHidden = []
                 
-                for (let el in openChildParent[ix].children) {
-                    if(typeof openChildParent[ix].children[el].classList !== 'undefined' && openChildParent[ix].children[el].classList.contains('hidden')) {
-                        isHidden.push(gridCol(openChildParent[ix].children[el]))
+                for (let cell of openChildParent[p].cells) {
+                    if (cell.classList.contains('hidden')) {
+                        isHidden.push(gridCol(cell))
                     }
                 }
 
                 // we will remove the existing child row and put another one with new data
                 // we also check if the hidden cells length > 0 before inserting a new child row
                 // so as to avoid empty child rows and orphaned child rows
-                openChildParent[ix].nextElementSibling.remove()
+                openChildParent[p].nextElementSibling.remove()
                 
                 if(hiddenCells.length > 0) {
-                    openChildParent[ix].after(childRow(isHidden))
+                    openChildParent[p].after(childRow(isHidden))
                 }
 
                 doTogglerScreen()
@@ -327,21 +326,11 @@ function Podtable(tableEl, config = {}) {
      * to dispatch event as well that there are currently no hidden cells.
      */
     function resize() {
-        let newWindowWidth = window.innerWidth
-
-        if (newWindowWidth < oldWindowWidth) {
-            recalc()
-            // childRowListener()
-
-        } else if (newWindowWidth > oldWindowWidth) {
-            recalc()
-
-            if (hiddenCells.length <= 0) {
-                eventDispatch(-1)
-                childRowListener()
-            }
-        }    
-        oldWindowWidth = newWindowWidth           
+        recalc()
+        if (hiddenCells.length <= 0) {
+            eventDispatch(-1)
+            childRowListener()
+        }
     }
 
     /**
@@ -384,7 +373,6 @@ function Podtable(tableEl, config = {}) {
      */
     function mount() {
         hiddenCells = []
-        let newWindowWidth = window.innerWidth
         let ilength = constIndex.length
         
         for (let i = 0; i < ilength; i++) {
@@ -396,7 +384,6 @@ function Podtable(tableEl, config = {}) {
                     } 
                 }
             }
-            oldWindowWidth = newWindowWidth 
         }
         doTogglerScreen()
     }
@@ -429,7 +416,7 @@ function Podtable(tableEl, config = {}) {
             }
         }
 
-        const callback = (mutationList, observer) => {
+        const callback = (mutationList) => {
             for (const mutation of mutationList) {
                 if (mutation.type === 'childList' && mutation.addedNodes.length === 1) {
                     if (mutation.addedNodes[0].tagName == 'TR' && !mutation.addedNodes[0].classList.contains('child')) {
