@@ -48,15 +48,13 @@ There are basically two ways to install podtablejs via npm or download and inclu
 
 Your html markup needs to include few things for podtable to work well and the markup should be structure with perceived standard.
 
-* A data attribute `data-grid-colname` which value will be the name of the column.
+* Podtable will use the last cell of every row including the head as control column so you need to define an empty cell for podtable to use as control toggle if you dont want it to use cell with data in it.
 
-* All table body rows should have the `data-grid-colname` attributes.
-
-* An empty th, td at the end of the table row element which will serve as control column.
-
-* The control cell must not be hidden with css or push off screen with absolute positioning.
+* Which ever method you went for above the control cell must not be hidden with css or push off screen with absolute positioning.
 
 * Its really important to include the stylesheet because podtable relies on it.
+
+* Also podtable css doesnt include general table styling only css which it needs so you can style your table as you want.
 
 
 ```html
@@ -72,8 +70,8 @@ Your html markup needs to include few things for podtable to work well and the m
     </thead>
     <tbody>
         <tr>
-            <td data-grid-colname="Firstname">Mark</td>
-            <td data-grid-colname="Lastname">Spencer</td>
+            <td>Mark</td>
+            <td>Spencer</td>
             ...
             <td></td>
         </tr>
