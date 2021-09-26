@@ -193,7 +193,7 @@ function Podtable(tableEl, config = {}) {
                 }
             }
 
-            parent.parentNode.insertBefore(childRow(isHidden), parent.nextSibling);
+            parent.parentNode.insertBefore(childRow(isHidden), parent.nextSibling)
         }
     }
 
@@ -258,7 +258,7 @@ function Podtable(tableEl, config = {}) {
             })
 
             table.classList.remove('show-toggle')
-            document.querySelector('.main-toggle').classList.remove('expanded')
+            table.tHead.rows[0].cells[table.tHead.rows[0].cells.length - 1].classList.remove('expanded')
         }
     }
 
