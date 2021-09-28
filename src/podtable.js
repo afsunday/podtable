@@ -1,7 +1,50 @@
 function Podtable(tableEl, config = {}) {
+    /**
+     * The associated table that podtable will render
+     * @type HTMLTableElement
+     */
     let table = document.querySelector(tableEl)
+
+    /**
+     * This is the target row which enables squishitude
+     * @type HTMLTableRowElement
+     */
     let targetRow
+
+    /**
+     * Error messages for table health check failure
+     * @returns String
+     */
     let errorMessage
+
+    /**
+     * This is the store for cells that currently hidden
+     * @type Array
+     */
+    let hiddenCells = []
+
+    /**
+     * This is constant index of cells generated from target row
+     * @type Array
+     */
+    let constIndex = []
+
+    /**
+     * These are cells that wont be hidden
+     * @type Array
+     */
+    let keepCell = [0]
+
+    /**
+     * This is the podtable instance
+     */
+    let _this = this
+
+    /**
+     * This holds the current cell been hidden
+     * @returns Number
+     */
+    _this.current
 
     /**
      * Perform an health check and if check fails we will throw an error
@@ -16,20 +59,31 @@ function Podtable(tableEl, config = {}) {
         targetRow = document.querySelector(`${tableEl} tbody tr`)
     }
 
+    /**
+     * A wrapper for the render table
+     */
     let tableContainer = document.createElement('div')
     tableContainer.setAttribute('id', 'podtable-container')
     table.parentNode.insertBefore(tableContainer, table)
     tableContainer.appendChild(table)
 
-    let hiddenCells = []
-    let constIndex = [] 
-    let keepCell = [0]
+    
 
-    let _this = this
-    _this.current
-
+    /**
+     * Set the cells that will not be hidden
+     * @returns void
+     */
     setKeepCell(config)
+
+    /**
+     * Attach event listener for control toggle
+     * @returns void
+     */
     setToggleCell(tableEl)
+
+    /**
+     * Set the cell index for 
+     */
     setCellIndex(tableEl)
 
     render()
@@ -327,6 +381,7 @@ function Podtable(tableEl, config = {}) {
      */
     function resize() {
         recalc()
+        
         if (hiddenCells.length <= 0) {
             eventDispatch(-1)
             childRowListener()
