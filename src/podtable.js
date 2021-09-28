@@ -148,14 +148,6 @@ function Podtable(tableEl, config = {}) {
             tempConst.push(ci)
         }
 
-        for (let i = 0; i < rows.length; i++) {
-            let row = rows[i].children
-
-            for (let td = 0; td < row.length; td++) {
-                row[td].setAttribute('data-cell-index', row[td].cellIndex)
-            }
-        }
-
         if (Object.prototype.hasOwnProperty.call(config, 'priority') &&
             Array.isArray(config.priority) &&
             config.priority.length > 0) {
@@ -362,12 +354,12 @@ function Podtable(tableEl, config = {}) {
      * which will take in the currently hidden index for that particular viewport.
      * @param {Number} index 
      */
-    function hideMain(index) {
+    function hideMain(index, pt = table) {
         hiddenCells.push(index)
-        
-        document.querySelectorAll(`[data-cell-index="${index}"]`).forEach(el => {
-            el.classList.add('hidden')
-        })
+
+        for (let row of pt.rows) {
+            row.cells[index].classList.add('hidden')
+        }
 
         eventDispatch(index)
     }
@@ -414,9 +406,9 @@ function Podtable(tableEl, config = {}) {
      */
     function flush() {
         for (let i = 0; i < hiddenCells.length; i++) {
-            document.querySelectorAll(`[data-cell-index="${hiddenCells[i]}"]`).forEach(el => {
-                el.classList.remove('hidden')
-            })
+            for (let row of table.rows) {
+                row.cells[hiddenCells[i]].classList.remove('hidden')
+            }
         }
 
         hiddenCells = []
@@ -465,10 +457,6 @@ function Podtable(tableEl, config = {}) {
         function doAttributes(node) {
             node.lastElementChild.classList.add('toggle')
             node.lastElementChild.addEventListener('click', (e) => toggle(e))
-
-            for (let i = 0; i < node.children.length; i++) {
-                node.children[i].setAttribute('data-cell-index', node.children[i].cellIndex)
-            }
         }
 
         const callback = (mutationList) => {
