@@ -3,34 +3,40 @@ function Podtable(tableEl, config = {}) {
      * The associated table that podtable will render
      * @type HTMLTableElement
      */
-    let table = document.querySelector(tableEl)
+    const table = document.querySelector(tableEl)
 
     /**
-     * This is the target row which enables squishitude
+     * This is the squishitude determinant row
      * @type HTMLTableRowElement
      */
     let targetRow
 
     /**
-     * Error messages for table health check failure
-     * @returns String
+     * A wrapper for the render table
+     * @returns HTMLElement
      */
-    let errorMessage
+    let tableContainer
 
     /**
-     * This is the store for cells that currently hidden
+     * Perform an health check on the passed table
+     * @returns void
+     */
+    healthCheck(table)
+
+    /**
+     * This is store currently hidden cells
      * @type Array
      */
     let hiddenCells = []
 
     /**
-     * This is constant index of cells generated from target row
+     * Constant index of cells generated from target row
      * @type Array
      */
     let constIndex = []
 
     /**
-     * These are cells that wont be hidden
+     * These is store for cell that wont be hidden
      * @type Array
      */
     let keepCell = [0]
@@ -41,130 +47,131 @@ function Podtable(tableEl, config = {}) {
     let _this = this
 
     /**
-     * This holds the current cell been hidden
+     * This holds the current cell that is hidden
      * @returns Number
      */
     _this.current
 
     /**
-     * Perform an health check and if check fails we will throw an error
-     * but if its case empty tbody rows then we will assume no data 
-     * and we then select the right element for target row
+     * Process the config options passed
+     * @returns void
      */
-    if (healthCheck(table) === false) {
-        throw new Error(errorMessage)
-    } else if (healthCheck(table) === -1) {
-        targetRow = document.querySelector(`${tableEl} thead tr`)
-    } else if (healthCheck(table)) {
-        targetRow = document.querySelector(`${tableEl} tbody tr`)
+    processConfig(config)
+
+    /**
+     * Attach event listeners for control toggle
+     * @returns void
+     */
+    setToggleCell(table)
+
+    /**
+     * Renders the table for the first instance
+     * @returns void
+     */
+    render()
+
+    /**
+     * Starts a mutation observer
+     * @returns void
+     */
+    ayncRedraw(table)
+
+    /**
+     * Set rendering target row
+     * @param {Boolean} passed 
+     */
+    function setTargetRow(passed) {
+        if (passed == -1) {
+            targetRow = table.tHead.rows[0]
+        } else if (passed == true) {
+            targetRow =  table.tBodies[0].rows[0]
+        }
+    }
+    
+    /**
+     * set the wrapper for podtable
+     */
+    function setWrapper() {
+        tableContainer = document.createElement('div')
+        tableContainer.setAttribute('id', 'podtable-container')
+        table.parentNode.insertBefore(tableContainer, table)
+        tableContainer.appendChild(table)
     }
 
     /**
-     * A wrapper for the render table
-     */
-    let tableContainer = document.createElement('div')
-    tableContainer.setAttribute('id', 'podtable-container')
-    table.parentNode.insertBefore(tableContainer, table)
-    tableContainer.appendChild(table)
-
-    
-
-    /**
-     * Set the cells that will not be hidden
-     * @returns void
-     */
-    setKeepCell(config)
-
-    /**
-     * Attach event listener for control toggle
-     * @returns void
-     */
-    setToggleCell(tableEl)
-
-    /**
-     * Set the cell index for 
-     */
-    setCellIndex(tableEl)
-
-    render()
-    ayncRedraw(tableEl)
-
-    /**
-     * Performs an Health check on the target table
+     * Perform health check and if it fail will throw an error
+     * And set the proper target row
      * @param {HTMLTableElement} table 
-     * @returns Boolean
      */
     function healthCheck(table) {
+        let passed = true
+
         if (table === null) {
-            errorMessage = 'Unable to access target HTMLTableElement'
-            return false
+            throw new Error('Unable to access target HTMLTableElement')
         }
 
         if (!(table instanceof HTMLTableElement)) {
-            errorMessage = 'Element is not a HTMLTableElement'
-            return false
+            throw new Error('Element is not an HTMLTableElement')
         }
 
         if (table.tHead === null) {
-            errorMessage = 'Table should have only one THEAD'
-            return false
+            throw new Error('Table should have only one THEAD')
         }
 
-        if (table.tBodies.length <= 0) {
-            errorMessage = 'Table should have only one TBODY'
-            return false
+        if (table.tHead.rows.length <= 0) {
+            throw new Error('tHead doesnt contain HTMLTableRowElement')
+        }
+
+        if (table.tHead.rows[0].cells.length < 2) {
+            throw new Error('tHead HTMLTableRowElement should have atleast 2 cells')
+        }
+
+        if (table.tBodies.length <= 0 || table.tBodies.length > 1) {
+            throw new Error('Table should have only one TBODY')
         }
 
         if (table.tBodies[0].rows.length <= 0) {
-            return -1
+            passed =  -1
         }
 
-        return true
+        setTargetRow(passed)
+        setWrapper()
     }
 
     /**
-     * Add css class to control cells
+     * Sets the control cells CSS clasess
      * @param {String} tableEl 
      */
-    function setToggleCell(tableEl) {
-        document.querySelector(`${tableEl} thead tr > th:last-child`).classList.add('main-toggle')
-        document.querySelectorAll(`${tableEl} tbody tr:not(tr.child) > td:last-child`).forEach(el => {
-            el.classList.add('toggle')
-        })
+    function setToggleCell(table) {
+        table.tHead.rows[0].lastElementChild.classList.add('main-toggle')
+
+        for (let row of table.tBodies[0].rows) {
+            row.lastElementChild.classList.add('toggle')
+        }
     }
 
     /**
-     * Add data attribute to elements to serve as cell index and we will
-     * Reverse cell index array to hide cells from the right and also make
-     * sure we reserve the toggle cell from being hidden along with others
-     * @param {String} tableElement
-     * @returns void 
+     * The method process the config options
+     * * Set cell hiddenp priority from the right
+     * * Set indexes of cells to keep
+     * @param {Object} config 
      */
-    function setCellIndex(tableEl) {
-        let rows = document.querySelectorAll(`${tableEl} tr`)
+    function processConfig(config) {
         let tempConst = []
 
-        for (let ci = 0; ci < targetRow.children.length; ci++) {
+        for (let ci = 0; ci < targetRow.cells.length; ci++) {
             tempConst.push(ci)
         }
 
         if (Object.prototype.hasOwnProperty.call(config, 'priority') &&
-            Array.isArray(config.priority) &&
-            config.priority.length > 0) {
-            
+            Array.isArray(config.priority) && config.priority.length > 0 ) {
             constIndex = Array.from(new Set(config.priority.concat(tempConst.reverse())))
         } else {
             constIndex = tempConst.reverse()
         }
 
         keepCell.push(tempConst.length - 1)
-    }
 
-    /**
-     * Merge config option with the existing keep cell array
-     * @param {Object} config 
-     */
-    function setKeepCell(config) {
         if(Object.prototype.hasOwnProperty.call(config, 'keepCell')) {
             if (! Array.isArray(config.keepCell)) {
                 throw TypeError('keep cell must be of type array') 
@@ -175,7 +182,7 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Create tr element and append cell column data
+     * Create HTMLTableRowElement element & append cell column data
      * @param {HTMLCollection} cells 
      * @returns Element Node
      */
@@ -199,8 +206,8 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Create grid column div Element to append to child row
-     * @param {el} el
+     * Create HTMLElement to append to child row
+     * @param {HTMLTableRowElement} el
      * @returns Element Node
      */
     function gridCol(el) {
@@ -225,7 +232,7 @@ function Podtable(tableEl, config = {}) {
     function toggle(e) {
         if (hiddenCells.length <= 0) { return }
         
-        let parent = e.target.parentElement
+        let parent = e.currentTarget.parentElement
 
         if(parent.classList.contains('has-child')) {
             parent.classList.remove('has-child')
@@ -261,6 +268,7 @@ function Podtable(tableEl, config = {}) {
                     toggleEls[i].click()
                 }
             }
+            
             toggler.classList.remove('expanded')
         } else {
             for (let i = 0; i < toggleEls.length; i++) {
@@ -269,6 +277,7 @@ function Podtable(tableEl, config = {}) {
                     toggleEls[i].click()
                 }
             }
+
             toggler.classList.add('expanded')
         }
     }
@@ -349,35 +358,36 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Hide the next vertical cells that falls into the maximum squishitude
-     * using index from the cells constant index array and we dispatch an event 
-     * which will take in the currently hidden index for that particular viewport.
+     * Hide cells that falls into maximum squishitude
+     * Dispatch event for the current hidden cells index
      * @param {Number} index 
      */
     function hideMain(index, pt = table) {
         hiddenCells.push(index)
 
         for (let row of pt.rows) {
-            row.cells[index].classList.add('hidden')
+            if (!row.classList.contains('child')) {
+                row.cells[index].classList.add('hidden')
+            }
         }
 
         eventDispatch(index)
     }
 
     /**
-     * Here we will check if the window resize is an increase or decrease 
-     * and determine which column to show base on the maximum squishitude 
-     * of cell rows and also all necessary listeners to enable reactivity. 
-     * when window size increases and there are no hidden cells we will need 
-     * to dispatch event as well that there are currently no hidden cells.
+     * Here we remove the hidden class and flush the hidden cells 
+     * array so as to restart procedure for the current viewport.
      */
-    function resize() {
-        recalc()
-        
-        if (hiddenCells.length <= 0) {
-            eventDispatch(-1)
-            childRowListener()
+    function flush() {
+        for (let i = 0; i < hiddenCells.length; i++) {
+            for (let row of table.rows) {
+                if (!row.classList.contains('child')) {
+                    row.cells[hiddenCells[i]].classList.remove('hidden')
+                }
+            }
         }
+
+        hiddenCells = []
     }
 
     /**
@@ -401,18 +411,19 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Here we remove the hidden class and flush the hidden cells 
-     * array so as to restart procedure for the current viewport.
+     * Determines cels to show base on the maximum squishitude 
+     * Call listener to enable reactivity. 
+     * Dispatch event if there are no hidden cells.
      */
-    function flush() {
-        for (let i = 0; i < hiddenCells.length; i++) {
-            for (let row of table.rows) {
-                row.cells[hiddenCells[i]].classList.remove('hidden')
-            }
+    function resize() {
+        recalc()
+        
+        if (hiddenCells.length <= 0) {
+            eventDispatch(-1)
+            childRowListener()
         }
-
-        hiddenCells = []
     }
+
 
     /**
      * On page load calculate cells which  can fit into the current
@@ -451,8 +462,8 @@ function Podtable(tableEl, config = {}) {
      * events listeners and also redispatch cells event but only the attached method
      * @param {String} tableEl 
      */
-    function ayncRedraw(tableEl) {
-        let bodyNode = document.querySelector(`${tableEl} tbody`)
+    function ayncRedraw(table) {
+        let bodyNode = table.tBodies[0]
 
         function doAttributes(node) {
             node.lastElementChild.classList.add('toggle')
@@ -475,10 +486,10 @@ function Podtable(tableEl, config = {}) {
                 }
             }
 
-            if (document.querySelector(`${tableEl} tbody`).rows.length <= 0) {
-                targetRow = document.querySelector(`${tableEl} thead tr`)
+            if (table.tBodies[0].rows.length <= 0) {
+                targetRow = table.tHead.rows[0]
             } else {
-                targetRow = document.querySelector(`${tableEl} tbody tr`)
+                targetRow = table.tBodies[0].rows[0]
             }
 
             flush()
@@ -486,7 +497,6 @@ function Podtable(tableEl, config = {}) {
         }
 
         const observer = new MutationObserver(callback)
-
         observer.observe(bodyNode, { childList: true })
     }
 
