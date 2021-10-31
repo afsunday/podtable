@@ -16,10 +16,37 @@
             width: 100%;
         }
 
+        /* @media (min-width: 768px) {
+            #app {
+                padding-left: 4.5rem;
+            } 
+        }
+
+        @media (min-width: 992px) {
+            #app {
+                padding-left: 16.25rem;
+            } 
+        } */
+        
+        @media (min-width: 992px) {
+            #app.toggle-side {
+                padding-left: 25rem;
+            } 
+        }
+
+
         .table td {
             font-size: 13px !important;
             font-weight: 500 !important;
             vertical-align: middle;
+        }
+
+        .hide-it {
+            display: none;
+        }
+
+        .show-it {
+            display: block;
         }
 
         .demo {
@@ -29,53 +56,68 @@
 </head>
 
 <body class="">
-    <div id="app" class="container-fluid pt-3">
-        <button class="btn btn-primary mb-3" @click="addRow()">Ajax</button>
-        <div class="bg-light mt-4">
-            <table id="table" class="table" width="100%">
-                <thead class="fw-light small">
-                    <tr>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Gender</th>
-                        <th>Occupation</th>
-                        <th>Salary</th>
-                        <th>Education</th>
-                        <th>Disability</th>
-                        <th>Mail</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="row in rows">
-                        <td>
-                            Mark
-                            <div class="demo">this is an extra-content for this cell on mobile</div>
-                        </td>
-                        <td>Spencer</td>
-                        <td>Male</td>
-                        <td>Robotics Engineer</td>
-                        <td>$50,000</td>
-                        <td>MSc Robotics</td>
-                        <td>Non</td>
-                        <td>spencer@gmail.com</td>
-                        <td>+2348451254781</td>
-                        <td>Active</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+
+
+    <div id="app" :class="{'toggle-side': side}" class="pt-3">
+        <div class="container-fluid">
+            <div class="d-flex flex-wrap">
+                <button class="btn btn-primary mb-3 me-3" @click="addRow()">ajax</button>
+                <button class="btn btn-primary mb-3 me-3" @click="minus()">minus</button>
+                <button class="btn btn-primary mb-3 me-3" @click="plus()">plus</button>
+                <button class="btn btn-primary mb-3 me-3" @click="toggleSide()">toggle side</button>
+            </div>
+            <div class="row g-3 g-md-3 g-lg-4 justify-content-sm-end flex-row-reverse">
+                <div class="col-md-3 col-lg-3">
+                    <div class="card">
+                        <div class="card-body p-5"></div>
+                    </div>
+                </div>
+    
+                <div class="col-md-9 col-lg-9">
+                    <div class="bg-light card mt-4">
+                        <table id="table" class="table" width="100%">
+                            <thead class="fw-light small">
+                                <tr>
+                                    <th>Firstname</th>
+                                    <th>Lastname</th>
+                                    <th>Gender</th>
+                                    <th>Occupation</th>
+                                    <th>Salary</th>
+                                    <th>Education</th>
+                                    <th>Disability</th>
+                                    <th>Mail</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="row in rows">
+                                    <td>
+                                        Mark
+                                        <div class="demo">this is an extra-content for this cell on mobile</div>
+                                    </td>
+                                    <td>Spencer</td>
+                                    <td>Male</td>
+                                    <td>Robotics Engineer</td>
+                                    <td>$50,000</td>
+                                    <td>MSc Robotics</td>
+                                    <td>Non</td>
+                                    <td>spencer@gmail.com</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- <script type="module">
+    <script type="module">
         import Podtable from '../dist/podtable.esm.js';
 
         new Podtable('#table', {
             keepCell: [1, 6],
-            priority: [2,4,5],
+            // priority: [2,4,5],
             event: true,
             method: (state) => {
                 let el = document.querySelectorAll('.demo')
@@ -89,49 +131,60 @@
                         n.style.display = 'none'
                     })
                 }
+
+                console.log(state)
             }
         })
-    </script> -->
+    </script>
 
     <script>  
-        window.addEventListener('DOMContentLoaded', () => {
-            new Podtable('#table', {
-                keepCell: [1, 6],
-                priority: [2,4,5],
-                event: true,
-                method: (state) => {
-                    let el = document.querySelectorAll('.demo');
+        // window.addEventListener('DOMContentLoaded', () => {
+        //     new Podtable('#table', {
+        //         keepCell: [1, 6],
+        //         priority: [2,4,5],
+        //         event: true,
+        //         method: (state) => {
+        //             let el = document.querySelector('.demo');
 
-                    if(state.current == 5) {
-                        el.forEach((n) => {
-                            n.style.display = 'block'
-                        }) 
-                    } else {
-                        el.forEach((n) => {
-                            n.style.display = 'none'
-                        })
-                    }
-                }
-            })
-        })
+        //             if(state.current == 5) {
+        //                 el.style.display = 'block'
+        //             } else {
+        //                 el.style.display = 'none'
+        //             }
+
+        //             console.log(state)
+        //         }
+        //     })
+        // })
     </script>
     <script>
         const vue = new Vue({
             el: '#app',
             data: {
                 rows: 50,
+                side: false
             },
             methods: {
                 addRow() {
                     this.rows = 0;
                     setTimeout(() => {
-                        this.rows = 10;
+                        this.rows = 50;
                     }, 2000)
+                },
+                minus() {
+                    this.rows -= 1;
+                },
+                plus() {
+                    this.rows += 1;
+                },
+
+                toggleSide() {
+                    this.side = !this.side
                 }
             }
         })
     </script>
-
+  
 <script src="../dist/podtable.js"></script>
 </body>
 </html>
