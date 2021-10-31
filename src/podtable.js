@@ -1,3 +1,5 @@
+import watcher  from './watcher'
+
 function Podtable(tableEl, config = {}) {
     /**
      * The associated table that podtable will render
@@ -22,6 +24,11 @@ function Podtable(tableEl, config = {}) {
      * @returns void
      */
     healthCheck(table)
+
+    /**
+     * Cache container width after health check passed
+     */
+    let oldTableContainerWidth = tableContainer.clientWidth
 
     /**
      * This is store currently hidden cells
@@ -411,9 +418,8 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Determines cels to show base on the maximum squishitude 
-     * Call listener to enable reactivity. 
-     * Dispatch event if there are no hidden cells.
+     * This method recalculate which cells to hide or show and dispatch
+     * and event with negative index to indicate there are no hiddenCells
      */
     function resize() {
         recalc()
@@ -446,14 +452,65 @@ function Podtable(tableEl, config = {}) {
         doTogglerScreen()
     }
 
+    /**
+     * This is the resize counterpart for window resize event
+     * or element watcher event
+     * @see resize
+     */
+    function observeResize() {
+        recalc()
+        if (hiddenCells.length <= 0) {
+            eventDispatch(-1)
+            childRowListener()
+        }
+    }
 
     /**
-     * Initialize table process
+     * Here we will start new observer or attach resize listener base on
+     * client browser support for observer api and the observer api is 
+     * meant to act as resize event for podtable and this is particularly
+     * useful incase of element resize without window resize.
+     */
+    function observed() {
+        let connected = false
+
+        try {
+            const observer = new ResizeObserver((entries) => {
+                if (entries[0].target.clientWidth !== oldTableContainerWidth) {
+                    observeResize()
+                }
+    
+                oldTableContainerWidth = entries[0].target.clientWidth
+            })
+
+            observer.observe(tableContainer)
+            connected = true
+        } catch (error) {
+            connected = false
+        }
+
+        return connected
+    }
+
+
+    /**
+     * Initialize table process here we are trying 
+     * three ways in listening to the table size
+     * 1 Resize observer which doesnt work on all browser
+     * 2 A customer watcher to watch element size if that fails
+     * 3 we fall back to window resize listener.
      */
     function render() {
         mount()
         addToggleListener()
-        window.addEventListener('resize',  () => resize())
+
+        if (!observed()) {
+            try {
+                watcher(tableContainer, resize).start()
+            } catch (err) {
+                window.addEventListener('resize',  () => resize()) 
+            }
+        }
     }
 
     /**

@@ -52,15 +52,21 @@
     display: none;
 }
 
-#podtable-container table .child .child-grid-col {
-    flex: 1 1 auto;
-    padding: 5px 10px 8px 0px;
-    
+#podtable-container table .child .child-grid-row {
+    display: grid;
+    grid-template-columns: repeat(2,auto);
+    grid-template-rows: auto;
+    grid-column-gap: 20px;
+    row-gap: 15px;
+    grid-row-gap: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
-#podtable-container table .child .child-grid-row {
-    display: flex;
-    flex-wrap: wrap;
+@media (min-width: 576px) {
+    #podtable-container table .child .child-grid-row {
+        grid-template-columns: repeat(3,auto);
+    }
 }
 
 #podtable-container table .child .child-grid-row > .child-grid-col > div:nth-child(1) {
