@@ -1,11 +1,11 @@
-import watcher  from './watcher'
+import { watch, getTable } from './utils'
 
 function Podtable(tableEl, config = {}) {
     /**
      * The associated table that podtable will render
      * @type HTMLTableElement
      */
-    const table = document.querySelector(tableEl)
+    const table = getTable(tableEl)
 
     /**
      * This is the squishitude determinant row
@@ -31,7 +31,7 @@ function Podtable(tableEl, config = {}) {
     let oldTableContainerWidth = tableContainer.clientWidth
 
     /**
-     * This is store currently hidden cells
+     * This is store for currently hidden cells
      * @type Array
      */
     let hiddenCells = []
@@ -159,7 +159,7 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * The method process the config options
-     * * Set cell hiddenp priority from the right
+     * * Set cell hidden priority from the right
      * * Set indexes of cells to keep
      * @param {Object} config 
      */
@@ -494,11 +494,12 @@ function Podtable(tableEl, config = {}) {
 
 
     /**
-     * Initialize table process here we are trying 
-     * three ways in listening to the table size
-     * 1 Resize observer which doesnt work on all browser
-     * 2 A customer watcher to watch element size if that fails
-     * 3 we fall back to window resize listener.
+     * Here we will do a mount, this will be at podtable instance
+     * then we will add child row event listeners after which we will
+     * use three ways in listening in checking for resize on podtable
+     * * Resize observer which doesnt work on all browser
+     * * A custom watcher to watch element size
+     * * Lastly we fallback to window resize listener.
      */
     function render() {
         mount()
@@ -506,7 +507,7 @@ function Podtable(tableEl, config = {}) {
 
         if (!observed()) {
             try {
-                watcher(tableContainer, resize).start()
+                watch(tableContainer, resize).start()
             } catch (err) {
                 window.addEventListener('resize',  () => resize()) 
             }
