@@ -104,9 +104,28 @@ new Podtable('#table', {
 
 ```
 
-The podtable instance receives a number of config option in achieving a responsive table which can be use together or as your use case demands.
+The podtable instance receives two params the first parameter a `selector` which can be and id OR a `table element` and also the second paramete ar config object which receives a number key value pairs in achieving a responsive table which can be use together or as your use case demands.
 
-#### Available Options
+The podtable instance
+
+```js
+
+import Podtable from 'podtable';
+
+new Podtable('#table', {
+    keepCell: [1, 6]
+    // ... other config options
+})
+
+// OR pass the table element directly
+new Podtable(document.querySelector('#table'), {
+    keepCell: [1, 6]
+    // ... other config options
+})
+
+```
+
+#### Config Options
 
 * `KeepCell`
 * `priority`
