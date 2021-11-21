@@ -14,12 +14,11 @@
 
 # Podtablejs
 
-Podtable is a no dependency table library to fit large table dataset into smaller device screens with various options on achieving a responsive datatable.
+Podtable is a no dependency table library to fit large table dataset into smaller device screens base on the maximum squishability with various options on achieving a responsive datatable.
 
 - [**Preview**](#preview)
 - [**Installation**](#installation)
 - [**Usage**](#usage)
-- [**Versions**](#versions)
 - [**Contributing**](#contributing)
 - [**Miscellaneous**](#miscellaneous)
     - [**Examples**](#examples)
@@ -104,7 +103,7 @@ new Podtable('#table', {
 
 ```
 
-The podtable instance receives two params the first parameter a `selector` which can be and id OR a `table element` and also the second paramete ar config object which receives a number key value pairs in achieving a responsive table which can be use together or as your use case demands.
+The podtable instance receives two params the first parameter a `selector` which can be an id OR a `table element` and also the second paramete is a config object which receives a key value pairs in achieving a responsive table which can be use together or as your use case demands.
 
 The podtable instance
 
@@ -157,28 +156,11 @@ new Podtable('#table', {
         let el = document.querySelectorAll('.demo')
 
         if(state.current == 5) {
-            el.forEach((n) => {
-                n.style.display = 'block'
-            }) 
-        } else {
-            el.forEach((n) => {
-                n.style.display = 'none'
-            })
+            // do something
         }
     }
 });
 ```
-
-# Versions
-
-### Available options
-
-#### V1.0.*
-
-* `KeepCell`
-* `event`
-* `forCell`
-* `method`
 
 
 # Contributing
@@ -197,9 +179,7 @@ Thank you for considering to contribute to Podtablejs below is a quick guide
 # Miscellaneous
 
 ### Examples
-
-* See examples folder [here](examples/index.html) on this repo
-* View it live on [Codepen](https://codepen.io/inlogicstudio/pen/BaZyyGZ) and this example is base on `V1.0.*`
+You can view it live on [Codepen](https://codepen.io/inlogicstudio/pen/BaZyyGZ) 
 
 ### Roadmap
 More awesomeness in achieving a responsive datatable. &#128522;

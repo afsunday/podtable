@@ -81,6 +81,12 @@
     }
 }
 
+@media (min-width: 576px) {
+    #podtable-container table .child .child-grid-row {
+        grid-template-columns: repeat(4, auto);
+    }
+}
+
 #podtable-container table .child .child-grid-row > .child-grid-col > div:nth-child(1) {
     font-weight: 500;
     font-size: 0.72rem;
