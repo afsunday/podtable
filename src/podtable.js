@@ -474,20 +474,20 @@ function Podtable(tableEl, config = {}) {
     function observed() {
         let connected = false
 
-        // try {
-        //     const observer = new ResizeObserver((entries) => {
-        //         if (entries[0].target.clientWidth !== oldTableContainerWidth) {
-        //             observeResize()
-        //         }
+        try {
+            const observer = new ResizeObserver((entries) => {
+                if (entries[0].target.clientWidth !== oldTableContainerWidth) {
+                    observeResize()
+                }
     
-        //         oldTableContainerWidth = entries[0].target.clientWidth
-        //     })
+                oldTableContainerWidth = entries[0].target.clientWidth
+            })
 
-        //     observer.observe(tableContainer)
-        //     connected = true
-        // } catch (error) {
-        //     connected = false
-        // }
+            observer.observe(tableContainer)
+            connected = true
+        } catch (error) {
+            connected = false
+        }
 
         return connected
     }
