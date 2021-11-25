@@ -179,7 +179,11 @@ Thank you for considering to contribute to Podtablejs below is a quick guide
 # Miscellaneous
 
 ### Examples
-You can view it live on [Codepen](https://codepen.io/inlogicstudio/pen/BaZyyGZ) 
+you can view it live on codepen
+
+* V1.1.4 [https://codepen.io/inlogicstudio/pen/wvqLEXP](https://codepen.io/inlogicstudio/pen/wvqLEXP)
+
+* V1.0.* [https://codepen.io/inlogicstudio/pen/BaZyyGZ](https://codepen.io/inlogicstudio/pen/BaZyyGZ) 
 
 ### Roadmap
 More awesomeness in achieving a responsive datatable. &#128522;
