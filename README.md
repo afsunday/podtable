@@ -21,8 +21,8 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 - [**Usage**](#usage)
 - [**Contributing**](#contributing)
 - [**Miscellaneous**](#miscellaneous)
-    - [**Examples**](#examples)
-    - [**Roadmap**](#roadmap)
+- [**Examples**](#examples)
+- [**Roadmap**](#roadmap)
 
 
 # Preview
@@ -178,18 +178,18 @@ Thank you for considering to contribute to Podtablejs below is a quick guide
 * And you're set to go &#128079;
 
 
-# Miscellaneous
-
-### Examples
+# Examples
 you can view it live on codepen
 
 * V1.1.4 [https://codepen.io/inlogicstudio/pen/wvqLEXP](https://codepen.io/inlogicstudio/pen/wvqLEXP)
 
 * V1.0.* [https://codepen.io/inlogicstudio/pen/BaZyyGZ](https://codepen.io/inlogicstudio/pen/BaZyyGZ) 
 
-### Roadmap
-More awesomeness in achieving a responsive datatable. &#128522;
+# Roadmap
+* Allow podtable to ignore rows from hiding it cells
 
-### License
+* More awesomeness in achieving a responsive datatable. &#128522;
+
+# License
 
 Podtablejs is open-sourced software licensed under the [MIT license](LICENSE.md).
