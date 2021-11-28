@@ -45,13 +45,15 @@ There are basically two ways to install podtablejs via npm or download and inclu
 
 ### HTML markup
 
-Your html markup needs to include few things for podtable to work well and the markup should be structure with perceived standard.
+Your html markup needs to include few things for podtable to work well.
 
-* Podtable will use the last cell of every row including the head as control column so you need to define an empty cell for podtable to use as control toggle if you dont want it to use cell with data in it.
+* Podtable will use the last cell of every row including the head as control column.
 
-* Which ever method you went for above the control cell must not be hidden with css or push off screen with absolute positioning.
+* Or you can define an empty cell for podtable to use as control column.
 
-* Its really important to include the stylesheet because podtable relies on it.
+* the control cell must not be hidden with css or push off screen with absolute positioning.
+
+* Its really important to include the podtable stylesheet because podtable relies on it.
 
 * Also podtable css doesnt include general table styling only css which it needs so you can style your table as you want.
 
