@@ -20,7 +20,6 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 - [**Installation**](#installation)
 - [**Usage**](#usage)
 - [**Contributing**](#contributing)
-- [**Miscellaneous**](#miscellaneous)
 - [**Examples**](#examples)
 - [**Roadmap**](#roadmap)
 
