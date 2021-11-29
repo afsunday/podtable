@@ -185,7 +185,9 @@ you can view it live on codepen
 * V1.0.* [https://codepen.io/inlogicstudio/pen/BaZyyGZ](https://codepen.io/inlogicstudio/pen/BaZyyGZ) 
 
 # Roadmap
-* Allow podtable to ignore rows from hiding it cells
+* Allow podtable to ignore rows from hiding it cells.
+
+* Custom control toggle to show hidden cells in child row unlike podtable current way of enforcing last cell of every row for control toggle.
 
 * More awesomeness in achieving a responsive datatable. &#128522;
 
