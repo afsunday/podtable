@@ -81,21 +81,15 @@
     }
 }
 
-@media (min-width: 576px) {
-    #podtable-container table .child .child-grid-row {
-        grid-template-columns: repeat(4, auto);
-    }
-}
-
 #podtable-container table .child .child-grid-row > .child-grid-col > div:nth-child(1) {
     font-weight: 500;
     font-size: 0.72rem;
     color: #6c757d;
-    line-height: 0.92rem;
+    line-height: 1rem;
 }
 
 #podtable-container table .child .child-grid-row > .child-grid-col > div:nth-child(2) {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #24282c;
 }

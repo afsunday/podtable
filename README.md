@@ -129,7 +129,6 @@ new Podtable(document.querySelector('#table'), {
 
 * `KeepCell`
 * `priority`
-* `event`
 * `method`
 
 The `keepCell` which is used to specify an array of cells to keep
@@ -148,11 +147,10 @@ new Podtable('#table', {
     priority: [2, 4, 5]
 })
 ```
-The `event` and `method` config option which is meant to be used together, the `event` option accepts a boolean inorder for podtable to emit an event and `method` option which takes in a function to be executed for the hidden cells. and the function receives a parameter to acess the index of the cell that was last hidden.
+The config option `method` option which takes in a function to be executed for the hidden cells. and the function receives a parameter to acess the index of the cell that was last hidden also there wont be need for the `event` option in other for the function to be called.
 
 ```js
 new Podtable('#table', {
-    event: true,
     method: (state) => {
         let el = document.querySelectorAll('.demo')
 

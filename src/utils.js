@@ -21,7 +21,7 @@ function watch(element, fn) {
     }
 
     /**
-     * dettach event listener and removw object
+     * dettach event listener and remove object
      */
     _this.stop = () => {
         obj.contentDocument.defaultView.removeEventListener('resize', fn)

@@ -2,8 +2,23 @@ import { watch, getTable } from './utils'
 
 function Podtable(tableEl, config = {}) {
     /**
+     * default config options
+     * @type Object
+     */
+    let defaultOptions = {
+        keepCell: [],
+        priority: [],
+        method: null
+    }
+
+    /**
+     * config options
+     */
+    let options = Object.assign({}, defaultOptions, config)
+
+    /**
      * The associated table that podtable will render
-     * @type HTMLTableElement
+     * @returns HTMLTableElement
      */
     const table = getTable(tableEl)
 
@@ -43,12 +58,6 @@ function Podtable(tableEl, config = {}) {
     let constIndex = []
 
     /**
-     * These is store for cell that wont be hidden
-     * @type Array
-     */
-    let keepCell = [0]
-
-    /**
      * This is the podtable instance
      */
     let _this = this
@@ -63,7 +72,7 @@ function Podtable(tableEl, config = {}) {
      * Process the config options passed
      * @returns void
      */
-    processConfig(config)
+    processConfig()
 
     /**
      * Attach event listeners for control toggle
@@ -114,7 +123,7 @@ function Podtable(tableEl, config = {}) {
         let passed = true
 
         if (table === null) {
-            throw new Error('Unable to access target HTMLTableElement')
+            throw new Error('HTMLTableElement is null')
         }
 
         if (!(table instanceof HTMLTableElement)) {
@@ -163,28 +172,23 @@ function Podtable(tableEl, config = {}) {
      * * Set indexes of cells to keep
      * @param {Object} config 
      */
-    function processConfig(config) {
+    function processConfig() {
         let tempConst = []
 
         for (let ci = 0; ci < targetRow.cells.length; ci++) {
             tempConst.push(ci)
         }
 
-        if (Object.prototype.hasOwnProperty.call(config, 'priority') &&
-            Array.isArray(config.priority) && config.priority.length > 0 ) {
-            constIndex = Array.from(new Set(config.priority.concat(tempConst.reverse())))
+        if (Array.isArray(options.priority) && options.priority.length > 0 ) {
+            constIndex = Array.from(new Set(options.priority.concat(tempConst.reverse())))
         } else {
             constIndex = tempConst.reverse()
         }
 
-        keepCell.push(tempConst.length - 1)
-
-        if(Object.prototype.hasOwnProperty.call(config, 'keepCell')) {
-            if (! Array.isArray(config.keepCell)) {
-                throw TypeError('keep cell must be of type array') 
-            } else {
-                keepCell = [...keepCell, ...config.keepCell]
-            }
+        if (! Array.isArray(options.keepCell)) {
+            throw TypeError('keepCell is not an array') 
+        } else {
+            options.keepCell.push(0, tempConst.length - 1)
         }
     }
 
@@ -328,7 +332,7 @@ function Podtable(tableEl, config = {}) {
      * Check for open child rows to enable reactivity as window resizes
      * then apply changes, item are remove and added every time window resize
      * and its like this so as to get an updated data from the cells
-     * parent row child row are redrawn on each control toggle.
+     * child row are redrawn on each control toggle.
      */
     function childRowListener () {
         let openChildRow = document.querySelectorAll('.child')
@@ -406,7 +410,7 @@ function Podtable(tableEl, config = {}) {
         for (let i = 0; i < constIndex.length; i++) {
             if (targetRow.clientWidth > tableContainer.clientWidth) {
                 if (!hiddenCells.includes(constIndex[i])) {
-                    if (!keepCell.includes(constIndex[i])) {
+                    if (! options.keepCell.includes(constIndex[i])) {
                         hideMain(constIndex[i])
                         childRowListener()
                     } 
@@ -443,7 +447,7 @@ function Podtable(tableEl, config = {}) {
 
             if (targetRow.clientWidth > tableContainer.clientWidth) {
                 if(! hiddenCells.includes(constIndex[i])) {
-                    if (!keepCell.includes(constIndex[i])) {
+                    if (! options.keepCell.includes(constIndex[i])) {
                         hideMain(constIndex[i])
                     } 
                 }
@@ -467,9 +471,7 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * Here we will start new observer or attach resize listener base on
-     * client browser support for observer api and the observer api is 
-     * meant to act as resize event for podtable and this is particularly
-     * useful incase of element resize without window resize.
+     * client browser support for observer api.
      */
     function observed() {
         let connected = false
@@ -496,7 +498,7 @@ function Podtable(tableEl, config = {}) {
     /**
      * Here we will do a mount, this will be at podtable instance
      * then we will add child row event listeners after which we will
-     * use three ways in listening in checking for resize on podtable
+     * use three ways in checking for resize on podtable
      * * Resize observer which doesnt work on all browser
      * * A custom watcher to watch element size
      * * Lastly we fallback to window resize listener.
@@ -517,7 +519,7 @@ function Podtable(tableEl, config = {}) {
     /**
      * On body rows child list mutation essential row attributes and events
      * will be lost hence the need to reset attriubtes and re attach necessary 
-     * events listeners and also redispatch cells event but only the attached method
+     * events listeners and also redispatch event.
      * @param {String} tableEl 
      */
     function ayncRedraw(table) {
@@ -531,12 +533,12 @@ function Podtable(tableEl, config = {}) {
         const callback = (mutationList) => {
             for (const mutation of mutationList) {
                 if (mutation.type === 'childList' && mutation.addedNodes.length === 1) {
-                    if (mutation.addedNodes[0].tagName == 'TR' && !mutation.addedNodes[0].classList.contains('child')) {
+                    if (mutation.addedNodes[0].tagName.toUpperCase() == 'TR' && !mutation.addedNodes[0].classList.contains('child')) {
                         doAttributes(mutation.addedNodes[0])
                         shouldPing()
                     }
                 } else if (mutation.type === 'childList' && mutation.removedNodes.length === 1) {
-                    if (mutation.removedNodes[0].tagName == 'TR' &&
+                    if (mutation.removedNodes[0].tagName.toUpperCase() == 'TR' &&
                         !mutation.removedNodes[0].classList.contains('child') &&
                         mutation.removedNodes[0].classList.contains('has-child')) {
                         mutation.nextSibling.remove()
@@ -566,7 +568,7 @@ function Podtable(tableEl, config = {}) {
     function eventDispatch(index) {
         _this.current = index
 
-        if (config.event) { shouldPing() }
+        if (typeof options.method === 'function') { shouldPing() }
     }
 
     /**
@@ -575,16 +577,14 @@ function Podtable(tableEl, config = {}) {
      * in a try catch block to avoid code execution failure.
      */
     function shouldPing() {
-        if (config.event) {
-            try {
-                config.method(_this)
-            } catch (error) {
-                console.error(error)
-            }
+        try {
+            options.method(_this)
+        } catch (error) {
+            console.error(error)
         }
     }
 
-    if (config.event) { return _this }
+    if (options.method) { return _this }
 }
 
 export default Podtable
