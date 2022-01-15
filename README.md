@@ -32,12 +32,11 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 
 # Installation
 
-There are basically two ways to install podtablejs via npm or download and include via script tag
-
 * Install via npm `npm install podtable` and add stylesheet.
-* CDN stylsheet `https://unpkg.com/podtable@<VERSION>/dist/podtable.css` 
-* CDN javascript `https://unpkg.com/podtable@<VERSION>/dist/podtable.js`
-* Or Download and reference in your page
+* OR via CDN 
+*  `https://unpkg.com/podtable@<VERSION>/dist/podtable.css`
+*  `https://unpkg.com/podtable@<VERSION>/dist/podtable.js`
+* OR Download and reference in your page
 
 
 # Usage
@@ -81,6 +80,7 @@ Your html markup needs to include few things for podtable to work well.
 ```
 
 Reference via the script tag
+
 ```js
 <script src="podtable/dist/podtable.js"></script> 
 
@@ -91,7 +91,7 @@ new Podtable('#table', {
 
 ```
 
-Using the import statement 
+OR Using the import statement 
 
 ```js
 
@@ -104,7 +104,7 @@ new Podtable('#table', {
 
 ```
 
-The podtable instance receives two params the first parameter a `selector` which can be an id OR a `table element` and also the second paramete is a config object which receives a key value pairs in achieving a responsive table which can be use together or as your use case demands.
+The podtable instance receives two params the first parameter an element selector OR a table element and also the second parameter is a config object which receives a key value pairs in achieving a responsive table which can be use together or as your use case demands.
 
 The podtable instance
 
@@ -132,7 +132,7 @@ new Podtable(document.querySelector('#table'), {
 * `method`
 
 The `keepCell` which is used to specify an array of cells to keep
-and also note the first cell for the table with an index of `0` will not be hidden by default.
+and also note the first cell for the table rows with an index of `0` will not be hidden by default.
 
 ```js
 new Podtable('#table', {
@@ -170,6 +170,8 @@ Thank you for considering to contribute to Podtablejs below is a quick guide
 
 * Include the `podtable/dist/podtable.js` file from a `<script>` tag on a webpage
 * Include the  `podtable/dist/podtable.css` from `<link>` tag on a webpage
+
+* Run  `npm run watch` to build src files
 
 * Pull requests, is recommend not just bug reports 
 * And you're set to go &#128079;
