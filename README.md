@@ -55,6 +55,11 @@ Your html markup needs to include few things for podtable to work well.
 
 * Also podtable css doesnt include general table styling only css which it needs so you can style your table as you want.
 
+* if you are using vuejs always provide a unique key attribute for your `v-for` because vue's in place Patch strategy 
+  * [Unique key for v-for in vuejs](https://stackoverflow.com/questions/56726147/why-does-vue-use-its-in-place-patch-though-im-binding-a-key-in-v-for-loop)
+
+  * [In place patch strategy in vuejs](https://v3.vuejs.org/guide/list.html#maintaining-state)
+
 
 ```html
 

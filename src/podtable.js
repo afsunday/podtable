@@ -94,13 +94,13 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * Set rendering target row
-     * @param {Boolean} passed 
+     * @param {HTMLTableElement} table 
      */
-    function setTargetRow(passed) {
-        if (passed == -1) {
+    function setTargetRow(table) {
+        if (table.tBodies[0].rows.length <= 0) {
             targetRow = table.tHead.rows[0]
-        } else if (passed == true) {
-            targetRow =  table.tBodies[0].rows[0]
+        } else {
+            targetRow = table.tBodies[0].rows[0]
         }
     }
     
@@ -120,37 +120,19 @@ function Podtable(tableEl, config = {}) {
      * @param {HTMLTableElement} table 
      */
     function healthCheck(table) {
-        let passed = true
-
-        if (table === null) {
-            throw new Error('HTMLTableElement is null')
+        if (!(table instanceof HTMLTableElement) || table == null || table.tHead == null) {
+            throw new Error('Invalid HTMLTableElement')
         }
 
-        if (!(table instanceof HTMLTableElement)) {
-            throw new Error('Element is not an HTMLTableElement')
-        }
-
-        if (table.tHead === null) {
-            throw new Error('Table should have only one THEAD')
-        }
-
-        if (table.tHead.rows.length <= 0) {
-            throw new Error('tHead doesnt contain HTMLTableRowElement')
-        }
-
-        if (table.tHead.rows[0].cells.length < 2) {
-            throw new Error('tHead HTMLTableRowElement should have atleast 2 cells')
+        if (table.tHead.rows.length <= 0 || table.tHead.rows[0].cells.length < 0) {
+            throw new Error('Invalid tHead HTMLTableRowElement')
         }
 
         if (table.tBodies.length <= 0 || table.tBodies.length > 1) {
             throw new Error('Table should have only one TBODY')
         }
 
-        if (table.tBodies[0].rows.length <= 0) {
-            passed =  -1
-        }
-
-        setTargetRow(passed)
+        setTargetRow(table)
         setWrapper()
     }
 
@@ -168,9 +150,8 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * The method process the config options
-     * * Set cell hidden priority from the right
-     * * Set indexes of cells to keep
-     * @param {Object} config 
+     * - Set cell hidden priority from the right
+     * - Set indexes of cells to keep
      */
     function processConfig() {
         let tempConst = []
@@ -195,7 +176,7 @@ function Podtable(tableEl, config = {}) {
     /**
      * Create HTMLTableRowElement element & append cell column data
      * @param {HTMLCollection} cells 
-     * @returns Element Node
+     * @returns HTMLTableRowElement
      */
     function childRow (cells) {
         let tr = document.createElement('tr')
@@ -218,8 +199,8 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * Create HTMLElement to append to child row
-     * @param {HTMLTableRowElement} el
-     * @returns Element Node
+     * @param {HTMLTableCellElement} el
+     * @returns HTMLElement
      */
     function gridCol(el) {
         let gridCol = document.createElement('div')
@@ -238,7 +219,7 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * Toggle single child row and calculate hidden element for the row 
-     * @param {event} event
+     * @param {event} e
      */
     function toggle(e) {
         if (hiddenCells.length <= 0) { return }
@@ -264,7 +245,7 @@ function Podtable(tableEl, config = {}) {
     /**
      * Handles toggle all child rows event by checking which rows 
      * has child to close and which rows has no child to open
-     * @param {event} event
+     * @param {event} e
      */
     function toggleAll(e) {
         if (hiddenCells.length <= 0) { return }
@@ -335,20 +316,20 @@ function Podtable(tableEl, config = {}) {
      * child row are redrawn on each control toggle.
      */
     function childRowListener () {
-        let openChildRow = document.querySelectorAll('.child')
+        let childRows = document.querySelectorAll('tr.child')
         
-        if(openChildRow.length > 0) {
-            let openChildParent = []
+        if(childRows.length > 0) {
+            let parentRows = []
 
-            for (let i = 0; i < openChildRow.length; i++) {
-                openChildParent.push(openChildRow[i].previousElementSibling)
+            for (let row of childRows) {
+                parentRows.push(row.previousElementSibling)
             }
 
             // Iterate from parents elements down to child elements
-            for (let p = 0; p < openChildParent.length; p++) {
+            for (let p = 0; p < parentRows.length; p++) {
                 let isHidden = []
                 
-                for (let cell of openChildParent[p].cells) {
+                for (let cell of parentRows[p].cells) {
                     if (cell.classList.contains('hidden')) {
                         isHidden.push(gridCol(cell))
                     }
@@ -357,10 +338,10 @@ function Podtable(tableEl, config = {}) {
                 // we will remove the existing child row and put another one with new data
                 // we also check if the hidden cells length > 0 before inserting a new child row
                 // so as to avoid empty child rows and orphaned child rows
-                openChildParent[p].nextElementSibling.remove()
+                parentRows[p].nextElementSibling.remove()
                 
                 if(hiddenCells.length > 0) {
-                    openChildParent[p].after(childRow(isHidden))
+                    parentRows[p].after(childRow(isHidden))
                 }
 
                 doTogglerScreen()
@@ -423,7 +404,7 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * This method recalculate which cells to hide or show and dispatch
-     * and event with negative index to indicate there are no hiddenCells
+     * event with negative index to indicate there are no hiddenCells
      */
     function resize() {
         recalc()
@@ -520,7 +501,7 @@ function Podtable(tableEl, config = {}) {
      * On body rows child list mutation essential row attributes and events
      * will be lost hence the need to reset attriubtes and re attach necessary 
      * events listeners and also redispatch event.
-     * @param {String} tableEl 
+     * @param {HTMLTableElement} table 
      */
     function ayncRedraw(table) {
         let bodyNode = table.tBodies[0]
@@ -532,12 +513,12 @@ function Podtable(tableEl, config = {}) {
 
         const callback = (mutationList) => {
             for (const mutation of mutationList) {
-                if (mutation.type === 'childList' && mutation.addedNodes.length === 1) {
+                if (mutation.type === 'childList' && mutation.addedNodes.length == 1) {
                     if (mutation.addedNodes[0].tagName.toUpperCase() == 'TR' && !mutation.addedNodes[0].classList.contains('child')) {
                         doAttributes(mutation.addedNodes[0])
                         shouldPing()
-                    }
-                } else if (mutation.type === 'childList' && mutation.removedNodes.length === 1) {
+                    }                    
+                } else if (mutation.type === 'childList' && mutation.removedNodes.length == 1) {
                     if (mutation.removedNodes[0].tagName.toUpperCase() == 'TR' &&
                         !mutation.removedNodes[0].classList.contains('child') &&
                         mutation.removedNodes[0].classList.contains('has-child')) {
@@ -546,12 +527,7 @@ function Podtable(tableEl, config = {}) {
                 }
             }
 
-            if (table.tBodies[0].rows.length <= 0) {
-                targetRow = table.tHead.rows[0]
-            } else {
-                targetRow = table.tBodies[0].rows[0]
-            }
-
+            setTargetRow(table)
             flush()
             mount()
         }
@@ -568,7 +544,7 @@ function Podtable(tableEl, config = {}) {
     function eventDispatch(index) {
         _this.current = index
 
-        if (typeof options.method === 'function') { shouldPing() }
+        if (options.method) { shouldPing() }
     }
 
     /**
@@ -577,10 +553,12 @@ function Podtable(tableEl, config = {}) {
      * in a try catch block to avoid code execution failure.
      */
     function shouldPing() {
-        try {
-            options.method(_this)
-        } catch (error) {
-            console.error(error)
+        if (options.method) {
+            try {
+                options.method(_this)
+            } catch (err) {
+                console.error(err)
+            }
         }
     }
 
