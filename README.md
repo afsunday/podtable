@@ -53,9 +53,9 @@ Your html markup needs to include few things for podtable to work well.
 
 * Its really important to include the podtable stylesheet because podtable relies on it.
 
-* Also podtable css doesnt include general table styling only css which it needs so you can style your table as you want.
+* Also podtable css doesn't include general table styling only css which it needs so you can style your table as you want.
 
-* if you are using vuejs always provide a unique key attribute for your `v-for` because vue's in place Patch strategy 
+* if you are using vuejs always provide a unique key attribute for your `v-for` because vue's in-place-Patch strategy 
   * [Unique key for v-for in vuejs](https://stackoverflow.com/questions/56726147/why-does-vue-use-its-in-place-patch-though-im-binding-a-key-in-v-for-loop)
 
   * [In place patch strategy in vuejs](https://v3.vuejs.org/guide/list.html#maintaining-state)
@@ -109,13 +109,9 @@ new Podtable('#table', {
 
 ```
 
-The podtable instance receives two params the first parameter an element selector OR a table element and also the second parameter is a config object which receives a key value pairs in achieving a responsive table which can be use together or as your use case demands.
-
-The podtable instance
+The podtable instance receives two params the first parameter is an element selector OR a table element and also the second parameter is a config object which receives a key value pairs in achieving a responsive table which can be use together or as your use case demands.
 
 ```js
-
-import Podtable from 'podtable';
 
 new Podtable('#table', {
     keepCell: [1, 6]
@@ -136,8 +132,8 @@ new Podtable(document.querySelector('#table'), {
 * `priority`
 * `method`
 
-The `keepCell` which is used to specify an array of cells to keep
-and also note the first cell for the table rows with an index of `0` will not be hidden by default.
+The `keepCell` which is an array of cells index that wont be hidden.
+Also note the first cell for the table rows with an index of `0` will not be hidden by default.
 
 ```js
 new Podtable('#table', {
@@ -145,7 +141,7 @@ new Podtable('#table', {
 });
 ```
 
-The `priority` config option which is an array of priority of how cells will be hidden and if only few cell index are passed to the `priority` config object this will take precedence over the other cell index.
+The `priority` config option which is an array of index of cells, which determines how cells will be hidden and if only few cell index are passed to the `priority` config object this will take precedence over the other cell index.
 
 ```js
 new Podtable('#table', {
@@ -157,8 +153,6 @@ The config option `method` option which takes in a function to be executed for t
 ```js
 new Podtable('#table', {
     method: (state) => {
-        let el = document.querySelectorAll('.demo')
-
         if(state.current == 5) {
             // do something
         }
@@ -192,7 +186,7 @@ you can view it live on codepen
 # Roadmap
 * Allow podtable to ignore rows from hiding it cells.
 
-* Custom control toggle to show hidden cells in child row unlike podtable current way of enforcing last cell of every row for control toggle.
+* Custom control toggle to show hidden cells in child row.
 
 * More awesomeness in achieving a responsive datatable. &#128522;
 
