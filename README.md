@@ -205,7 +205,7 @@ In fact for every row group you can define an extra row in order to show empty r
 ```
 
 
-### Hide Control column until needed
+### Hide Control column until its needed
 
 you can apply the css below if you need to hide the control cell untill its needed.
 

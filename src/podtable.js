@@ -59,15 +59,11 @@ function Podtable(tableEl, config = {}) {
     let constIndex = []
 
     /**
-     * This is the podtable instance
+     * This is the podtable acessible state
      */
-    let _this = this
-
-    /**
-     * This holds the current cell that is hidden
-     * @returns Number
-     */
-    _this.current
+    let state = {
+        current: -1
+    }
 
     /**
      * Process the config options passed
@@ -538,7 +534,7 @@ function Podtable(tableEl, config = {}) {
      * @param {Number} index 
      */
     function eventDispatch(index) {
-        _this.current = index
+        state.current = index
 
         if (options.method) { shouldPing() }
     }
@@ -549,14 +545,14 @@ function Podtable(tableEl, config = {}) {
     function shouldPing() {
         if (options.method) {
             try {
-                options.method(_this)
+                options.method(state)
             } catch (err) {
                 console.error(err)
             }
         }
     }
 
-    if (options.method) { return _this }
+    if (options.method) { return state }
 }
 
 export default Podtable
