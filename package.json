@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": false,
   "source": "src/index.js",
-  "main": "dist/podtable.js",
+  "main": "dist/podtable.esm.js",
   "unpkg": "dist/podtable.js",
   "scripts": {
     "build": "npm run build:esm && npm run build:umd",
