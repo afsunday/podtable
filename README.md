@@ -205,7 +205,7 @@ In fact for every row group you can define an extra row in order to show empty r
 ```
 
 
-### Hide Control column until its needed
+## Control column
 
 you can apply the css below if you need to hide the control cell untill its needed.
 
@@ -238,4 +238,4 @@ you can view it live on codepen
 
 ## License
 
-Podtablejs is open-sourced software licensed under the [MIT license](LICENSE.md).
+Podtablejs is an open-sourced software licensed under the [MIT license](LICENSE.md).
