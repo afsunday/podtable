@@ -1,4 +1,4 @@
-function watch(element, fn) {
+export function watch(element, fn) {
     let _this = {}
     let obj = document.createElement('object')
 
@@ -36,15 +36,10 @@ function watch(element, fn) {
  * @param {String|HTMLTableElement} tableEl 
  * @returns HTMLTableElement
  */
-function getTable(tableEl) {
+export function getTable(tableEl) {
     if (typeof tableEl === 'string' || tableEl instanceof String) {
         return document.querySelector(tableEl)
     } else {
         return tableEl
     }
-}
-
-export {
-    watch,
-    getTable
 }

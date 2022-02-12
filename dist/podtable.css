@@ -64,6 +64,11 @@
     display: none;
 }
 
+#podtable-container table tbody tr[data-ptr-ignore] {
+    color: #606161;
+    background-color: #ececec;
+}
+
 #podtable-container table .child .child-grid-row {
     display: grid;
     grid-template-columns: repeat(2,auto);

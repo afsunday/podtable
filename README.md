@@ -12,7 +12,7 @@
     </a>
 </p>
 
-# Podtablejs
+## Podtablejs
 
 Podtable is a no dependency table library to fit large table dataset into smaller device screens base on the maximum squishability with various options on achieving a responsive datatable.
 
@@ -24,41 +24,33 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 - [**Roadmap**](#roadmap)
 
 
-# Preview
+## Preview
 
 <p align="center">
     <img src="art/podtablejs.png" alt="podtablejs">
 </p>
 
-# Installation
+## Installation
 
-* Install via npm `npm install podtable` and add stylesheet.
-* OR via CDN 
-*  `https://unpkg.com/podtable@<VERSION>/dist/podtable.css`
-*  `https://unpkg.com/podtable@<VERSION>/dist/podtable.js`
-* OR Download and reference in your page
+* Install via npm `npm install podtable` OR via CDN
+* `https://unpkg.com/podtable@<VERSION>/dist/podtable.css`
+* `https://unpkg.com/podtable@<VERSION>/dist/podtable.js`
 
 
-# Usage
 
-### HTML markup
-
-Your html markup needs to include few things for podtable to work well.
+## Usage
 
 * Podtable will use the last cell of every row including the head as control column.
 
 * Or you can define an empty cell for podtable to use as control column.
 
-* the control cell must not be hidden with css or push off screen with absolute positioning.
-
 * Its really important to include the podtable stylesheet because podtable relies on it.
 
 * Also podtable css doesn't include general table styling only css which it needs so you can style your table as you want.
 
-* if you are using vuejs always provide a unique key attribute for your `v-for` because vue's in-place-Patch strategy 
-  * [Unique key for v-for in vuejs](https://stackoverflow.com/questions/56726147/why-does-vue-use-its-in-place-patch-though-im-binding-a-key-in-v-for-loop)
+* if you are using vuejs always provide a [Unique key for your v-for](https://stackoverflow.com/questions/56726147/why-does-vue-use-its-in-place-patch-though-im-binding-a-key-in-v-for-loop) because of vue's [In-place-patch](https://v3.vuejs.org/guide/list.html#maintaining-state) strategy
 
-  * [In place patch strategy in vuejs](https://v3.vuejs.org/guide/list.html#maintaining-state)
+
 
 
 ```html
@@ -84,28 +76,11 @@ Your html markup needs to include few things for podtable to work well.
 
 ```
 
-Reference via the script tag
-
-```js
-<script src="podtable/dist/podtable.js"></script> 
-
-new Podtable('#table', {
-    keepCell: [1, 6]
-    // ... other config options
-})
-
-```
-
-OR Using the import statement 
-
 ```js
 
 import Podtable from 'podtable';
 
-new Podtable('#table', {
-    keepCell: [1, 6]
-    // ... other config options
-})
+new Podtable('#table')
 
 ```
 
@@ -114,14 +89,12 @@ The podtable instance receives two params the first parameter is an element sele
 ```js
 
 new Podtable('#table', {
-    keepCell: [1, 6]
-    // ... other config options
+    // config options
 })
 
 // OR pass the table element directly
 new Podtable(document.querySelector('#table'), {
-    keepCell: [1, 6]
-    // ... other config options
+    // config options
 })
 
 ```
@@ -131,6 +104,7 @@ new Podtable(document.querySelector('#table'), {
 * `KeepCell`
 * `priority`
 * `method`
+* `rowGroup`
 
 The `keepCell` which is an array of cells index that wont be hidden.
 Also note the first cell for the table rows with an index of `0` will not be hidden by default.
@@ -148,7 +122,7 @@ new Podtable('#table', {
     priority: [2, 4, 5]
 })
 ```
-The config option `method` option which takes in a function to be executed for the hidden cells. and the function receives a parameter to acess the index of the cell that was last hidden also there wont be need for the `event` option in other for the function to be called.
+The config option `method` option which takes in a function to be executed for the hidden cells. and the function receives a parameter to acess the index of the cell that was last hidden.
 
 ```js
 new Podtable('#table', {
@@ -160,36 +134,108 @@ new Podtable('#table', {
 });
 ```
 
+The config option `rowGroup` which takes in a boolean in order to use the row group feature, so for this to work 
 
-# Contributing
+* Data Iteration needs to be done via the body tag that is rows should be grouped together via the body tag
 
-Thank you for considering to contribute to Podtablejs below is a quick guide
+* podtable assumes every first row of each body tag is the row group header hence there is need to let podtable know it should ignore it using a dataset `data-ptr-ignore`
 
-* clone this repo locally
+* Content in your ignored rows should be wrapable and should not have a fixed width
 
-* Include the `podtable/dist/podtable.js` file from a `<script>` tag on a webpage
-* Include the  `podtable/dist/podtable.css` from `<link>` tag on a webpage
+* Your ignored row td cells should have colspan that will correspond to the number of cells in other rows.
 
-* Run  `npm run watch` to build src files
+```html
+<table id="table" class="table" width="100%">
+    <thead>
+        <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            ...
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-ptr-ignore="">
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td>Mark</td>
+            <td>Spencer</td>
+            ...
+            <td></td>
+        </tr>
+    </tbody>
+    ...
+    <!-- more body tags here grouping rows together -->
+</table>
+```
 
-* Pull requests, is recommend not just bug reports 
-* And you're set to go &#128079;
+```js
+new Podtable('#table', {
+    rowGroup: true
+});
+```
+
+In fact for every row group you can define an extra row in order to show empty row group message.
+
+```html
+<table id="table" class="table" width="100%">
+    <thead>
+        <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            ...
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-ptr-ignore="">
+            <td colspan="3">This is the Heading</td>
+        </tr>
+
+        <!-- other rows if there is data to show -->
+
+        <tr data-ptr-ignore="">
+            <td colspan="3">
+                Sorry no record to show
+            </td>
+        </tr>
+    </tbody>
+</table>
+```
 
 
-# Examples
+### Hide Control column until needed
+
+you can apply the css below if you need to hide the control cell untill its needed.
+
+```css
+#podtable-container table tr td:last-of-type,
+#podtable-container table tr th:last-of-type {
+    display: none;
+}
+
+#podtable-container table.show-toggle tr td:last-of-type,
+#podtable-container table.show-toggle tr th:last-of-type {
+    display: revert;
+}
+```
+
+## Contributing
+
+Thank you for considering to contribute to Podtablejs, pull requests, is highly recommended not just bug reports.
+
+
+## Examples
 you can view it live on codepen
 
-* V1.1.4 [https://codepen.io/inlogicstudio/pen/wvqLEXP](https://codepen.io/inlogicstudio/pen/wvqLEXP)
+* V1.1.4 [https://codepen.io/inlogicstudio/pen/wvqLEXP](https://codepen.io/inlogicstudio/pen/wvqLEXP) 
 
-* V1.0.* [https://codepen.io/inlogicstudio/pen/BaZyyGZ](https://codepen.io/inlogicstudio/pen/BaZyyGZ) 
-
-# Roadmap
-* Allow podtable to ignore rows from hiding it cells.
-
+## Roadmap
 * Custom control toggle to show hidden cells in child row.
 
 * More awesomeness in achieving a responsive datatable. &#128522;
 
-# License
+## License
 
 Podtablejs is open-sourced software licensed under the [MIT license](LICENSE.md).

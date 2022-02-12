@@ -8,7 +8,8 @@ function Podtable(tableEl, config = {}) {
     let defaultOptions = {
         keepCell: [],
         priority: [],
-        method: null
+        method: null,
+        rowGroup: false
     }
 
     /**
@@ -97,11 +98,7 @@ function Podtable(tableEl, config = {}) {
      * @param {HTMLTableElement} table 
      */
     function setTargetRow(table) {
-        if (table.tBodies[0].rows.length <= 0) {
-            targetRow = table.tHead.rows[0]
-        } else {
-            targetRow = table.tBodies[0].rows[0]
-        }
+        targetRow = table.tHead.rows[0]
     }
     
     /**
@@ -116,7 +113,6 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * Perform health check and if it fail will throw an error
-     * And set the proper target row
      * @param {HTMLTableElement} table 
      */
     function healthCheck(table) {
@@ -128,10 +124,6 @@ function Podtable(tableEl, config = {}) {
             throw new Error('Invalid tHead HTMLTableRowElement')
         }
 
-        if (table.tBodies.length <= 0 || table.tBodies.length > 1) {
-            throw new Error('Table should have only one TBODY')
-        }
-
         setTargetRow(table)
         setWrapper()
     }
@@ -141,17 +133,20 @@ function Podtable(tableEl, config = {}) {
      * @param {String} tableEl 
      */
     function setToggleCell(table) {
-        table.tHead.rows[0].lastElementChild.classList.add('main-toggle')
-
-        for (let row of table.tBodies[0].rows) {
-            row.lastElementChild.classList.add('toggle')
+        for (let row of table.rows) {
+            if (row.parentElement.tagName.toUpperCase() == 'TBODY') {
+                if (! row.hasAttribute('data-ptr-ignore')) {
+                    row.lastElementChild.classList.add('toggle')
+                }
+            } else {
+                row.lastElementChild.classList.add('main-toggle')
+            }
         }
     }
 
     /**
-     * The method process the config options
-     * - Set cell hidden priority from the right
-     * - Set indexes of cells to keep
+     * Set cell hidden priority from the right
+     * Set indexes of cells to keep
      */
     function processConfig() {
         let tempConst = []
@@ -174,7 +169,7 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Create HTMLTableRowElement element & append cell column data
+     * Create HTMLTableRowElement & append cell column data
      * @param {HTMLCollection} cells 
      * @returns HTMLTableRowElement
      */
@@ -357,8 +352,8 @@ function Podtable(tableEl, config = {}) {
     function hideMain(index, pt = table) {
         hiddenCells.push(index)
 
-        for (let row of pt.rows) {
-            if (!row.classList.contains('child')) {
+        for (let row of pt.rows) {            
+            if (!row.classList.contains('child') && !row.hasAttribute('data-ptr-ignore')) {
                 row.cells[index].classList.add('hidden')
             }
         }
@@ -373,7 +368,7 @@ function Podtable(tableEl, config = {}) {
     function flush() {
         for (let i = 0; i < hiddenCells.length; i++) {
             for (let row of table.rows) {
-                if (!row.classList.contains('child')) {
+                if (!row.classList.contains('child') && !row.hasAttribute('data-ptr-ignore')) {
                     row.cells[hiddenCells[i]].classList.remove('hidden')
                 }
             }
@@ -417,8 +412,8 @@ function Podtable(tableEl, config = {}) {
 
 
     /**
-     * On page load calculate cells which  can fit into the current
-     * maximum squishitude: apply visibility, attach necessary listeners.
+     * On mounted calculate cells which  can fit into the current
+     * maximum squishitude: apply visibility, attach listeners.
      */
     function mount() {
         hiddenCells = []
@@ -451,8 +446,7 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Here we will start new observer or attach resize listener base on
-     * client browser support for observer api.
+     * Handles resize listener
      */
     function observed() {
         let connected = false
@@ -477,12 +471,8 @@ function Podtable(tableEl, config = {}) {
 
 
     /**
-     * Here we will do a mount, this will be at podtable instance
-     * then we will add child row event listeners after which we will
-     * use three ways in checking for resize on podtable
-     * * Resize observer which doesnt work on all browser
-     * * A custom watcher to watch element size
-     * * Lastly we fallback to window resize listener.
+     * Starts an observer at podtable instance and 
+     * attach necessary listeners
      */
     function render() {
         mount()
@@ -498,27 +488,33 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * On body rows child list mutation essential row attributes and events
-     * will be lost hence the need to reset attriubtes and re attach necessary 
-     * events listeners and also redispatch event.
+     * Handles childList mutations by re-attaching attributes, 
+     * events and dispatching events
      * @param {HTMLTableElement} table 
      */
     function ayncRedraw(table) {
-        let bodyNode = table.tBodies[0]
-
-        function doAttributes(node) {
-            node.lastElementChild.classList.add('toggle')
-            node.lastElementChild.addEventListener('click', (e) => toggle(e))
+        function resetRow(node) {
+            if (! node.hasAttribute('data-ptr-ignore')) {
+                node.lastElementChild.classList.add('toggle')
+                node.lastElementChild.addEventListener('click', (e) => toggle(e))
+            }
         }
 
-        const callback = (mutationList) => {
-            for (const mutation of mutationList) {
-                if (mutation.type === 'childList' && mutation.addedNodes.length == 1) {
+        const callback = (mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type == 'childList' && mutation.addedNodes.length == 1) {
+                    if (mutation.addedNodes[0].tagName.toUpperCase() == 'TBODY') {
+                        for (let node of mutation.addedNodes[0].children) {
+                            resetRow(node)
+                            shouldPing()
+                        }
+                    }
+
                     if (mutation.addedNodes[0].tagName.toUpperCase() == 'TR' && !mutation.addedNodes[0].classList.contains('child')) {
-                        doAttributes(mutation.addedNodes[0])
+                        resetRow(mutation.addedNodes[0])
                         shouldPing()
-                    }                    
-                } else if (mutation.type === 'childList' && mutation.removedNodes.length == 1) {
+                    }
+                } else if (mutation.type == 'childList' && mutation.removedNodes.length == 1) {
                     if (mutation.removedNodes[0].tagName.toUpperCase() == 'TR' &&
                         !mutation.removedNodes[0].classList.contains('child') &&
                         mutation.removedNodes[0].classList.contains('has-child')) {
@@ -532,13 +528,13 @@ function Podtable(tableEl, config = {}) {
             mount()
         }
 
+        let observable = options.rowGroup ? table : table.tBodies[0]
         const observer = new MutationObserver(callback)
-        observer.observe(bodyNode, { childList: true })
+        observer.observe(observable, { childList: true })
     }
 
     /**
-     * For every cells hidden this method will be called which check
-     * if events want to be received also attach hidden index to return object.
+     * Dispatch event for the current hidden cell index
      * @param {Number} index 
      */
     function eventDispatch(index) {
@@ -548,9 +544,7 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
-     * Call the user attached method only if the event key is in the config 
-     * object and it is set to true and we will  also wrap the function call 
-     * in a try catch block to avoid code execution failure.
+     * Dispatchs event
      */
     function shouldPing() {
         if (options.method) {
