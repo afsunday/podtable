@@ -233,6 +233,8 @@ you can view it live on codepen
 
 ## Roadmap
 * Custom control toggle to show hidden cells in child row.
+* controls toggle in footer thoughts on what to do about it.
+* A `destroy()` method to revert any alteration the table in the DOM
 
 * More awesomeness in achieving a responsive datatable. &#128522;
 
