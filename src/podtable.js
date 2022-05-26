@@ -1,4 +1,4 @@
-import { watch, getTable } from './utils'
+import { watch, getTable, detachRows } from './utils'
 
 function Podtable(tableEl, config = {}) {
     /**
@@ -58,12 +58,11 @@ function Podtable(tableEl, config = {}) {
      */
     let constIndex = []
 
+    
     /**
-     * This is the podtable acessible state
+     * @type object
      */
-    let state = {
-        current: -1
-    }
+    let state = { current: -1 }
 
     /**
      * Process the config options passed
@@ -87,7 +86,7 @@ function Podtable(tableEl, config = {}) {
      * Starts a mutation observer
      * @returns void
      */
-    ayncRedraw(table)
+    watchMutation(table)
 
     /**
      * Set rendering target row
@@ -96,6 +95,26 @@ function Podtable(tableEl, config = {}) {
     function setTargetRow(table) {
         targetRow = table.tHead.rows[0]
     }
+
+    /**
+     * Resize event method
+     */
+    this.watchResize = false
+
+    /**
+     * Resize event method
+     */
+    this.nativeResize = false
+
+    /**
+     * Resize event method
+     */
+    this.windowResize = false
+
+    /**
+     * observer event method
+     */
+    this.observer = false
     
     /**
      * set the wrapper for podtable
@@ -268,19 +287,30 @@ function Podtable(tableEl, config = {}) {
     /**
      * Adds click Event listener to rows with css class of 
      * toggle and main-toggle so as to toggle child rows
+     * @return void
      */
     function addToggleListener () {
         let togElements = document.querySelectorAll('.toggle')
         for (let i = 0; i < togElements.length; i++) {
-            togElements[i].addEventListener('click', (e) => {
-                toggle(e)
-            })
+            togElements[i].addEventListener('click', toggle)
         }
 
         let mainToggle = document.querySelector('.main-toggle')
-        mainToggle.addEventListener('click', (e) => {
-            toggleAll(e)
-        })
+        mainToggle.addEventListener('click', toggleAll)
+    }
+
+    /**
+     * Remove control toggle listener on rows
+     * @return object
+     */
+    function removeToggleListener() {
+        let togElements = document.querySelectorAll('.toggle')
+        for (let i = 0; i < togElements.length; i++) {
+            togElements[i].removeEventListener('click', toggle)
+        }
+
+        let mainToggle = document.querySelector('.main-toggle')
+        mainToggle.removeEventListener('click', toggleAll)
     }
 
     /**
@@ -443,28 +473,25 @@ function Podtable(tableEl, config = {}) {
 
     /**
      * Handles resize listener
+     * @returns boolean|ResizeObserver
      */
     function observed() {
-        let connected = false
-
         try {
-            const observer = new ResizeObserver((entries) => {
+            let ro = new ResizeObserver((entries) => {
                 if (entries[0].target.clientWidth !== oldTableContainerWidth) {
                     observeResize()
                 }
     
                 oldTableContainerWidth = entries[0].target.clientWidth
             })
+                
+            ro.observe(tableContainer)
 
-            observer.observe(tableContainer)
-            connected = true
-        } catch (error) {
-            connected = false
+            this.nativeResize = ro
+        } catch (err) {
+            return  false
         }
-
-        return connected
     }
-
 
     /**
      * Starts an observer at podtable instance and 
@@ -476,19 +503,38 @@ function Podtable(tableEl, config = {}) {
 
         if (!observed()) {
             try {
-                watch(tableContainer, resize).start()
+                this.watchResize = watch(tableContainer, resize)
+                this.watchResize.start()
             } catch (err) {
-                window.addEventListener('resize',  () => resize()) 
+                window.addEventListener('resize', resize) 
             }
         }
     }
+
+    /**
+     * Revert all events made to the DOM
+     */
+    function destroy() {
+        window.removeEventListener('resize', resize)
+        flush()
+
+        detachRows(table, tableContainer, this)
+        removeToggleListener()
+    }
+
+    /**
+     * Revert any alteration to the table in the DOM
+     * and detach events
+     * @returns void
+     */
+    state.destroy = () => destroy()
 
     /**
      * Handles childList mutations by re-attaching attributes, 
      * events and dispatching events
      * @param {HTMLTableElement} table 
      */
-    function ayncRedraw(table) {
+    function watchMutation(table) {
         function resetRow(node) {
             if (! node.hasAttribute('data-ptr-ignore')) {
                 node.lastElementChild.classList.add('toggle')
@@ -525,8 +571,8 @@ function Podtable(tableEl, config = {}) {
         }
 
         let observable = options.rowGroup ? table : table.tBodies[0]
-        const observer = new MutationObserver(callback)
-        observer.observe(observable, { childList: true })
+        this.observer = new MutationObserver(callback)
+        this.observer.observe(observable, { childList: true })
     }
 
     /**

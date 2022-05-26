@@ -12,13 +12,14 @@
     </a>
 </p>
 
-## Podtablejs
 
 Podtable is a no dependency table library to fit large table dataset into smaller device screens base on the maximum squishability with various options on achieving a responsive datatable.
 
 - [**Preview**](#preview)
 - [**Installation**](#installation)
 - [**Usage**](#usage)
+- [**Config**](#config-options)
+- [**Methods**](#instance-methods)
 - [**Contributing**](#contributing)
 - [**Examples**](#examples)
 - [**Roadmap**](#roadmap)
@@ -32,13 +33,41 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 
 ## Installation
 
-* Install via npm `npm install podtable` OR via CDN
-* `https://unpkg.com/podtable@<VERSION>/dist/podtable.css`
-* `https://unpkg.com/podtable@<VERSION>/dist/podtable.js`
+##### NPM
+
+`npm install podtable`
+
+##### CDN
+`https://unpkg.com/podtable@<VERSION>/dist/podtable.css`
+`https://unpkg.com/podtable@<VERSION>/dist/podtable.js`
 
 
 
 ## Usage
+
+Include podtable script
+
+```html
+<script src="path/to/podtable.js></script>
+```
+
+Include podtable styles
+
+```html
+<link rel="stylesheet" type="text/css" href="path/to/podtable.css" />
+```
+
+Or import podtable using the ES6 syntax
+
+```js
+import Podtable from  "podtable"
+```
+
+```css
+@import "~podtable/dist/podtable.css"
+```
+
+#### Quick Note :
 
 * Podtable will use the last cell of every row including the head as control column.
 
@@ -48,11 +77,10 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 
 * Also podtable css doesn't include general table styling only css which it needs so you can style your table as you want.
 
-* if you are using vuejs always provide a [Unique key for your v-for](https://stackoverflow.com/questions/56726147/why-does-vue-use-its-in-place-patch-though-im-binding-a-key-in-v-for-loop) because of vue's [In-place-patch](https://v3.vuejs.org/guide/list.html#maintaining-state) strategy
+* if you are using vuejs always provide a [Unique key for your v-for](https://stackoverflow.com/questions/56726147/why-does-vue-use-its-in-place-patch-though-im-binding-a-key-in-v-for-loop) because of vue's [In-place-patch](https://v3.vuejs.org/guide/list.html#maintaining-state) strategy.
 
 
-
-
+Your HTML structure
 ```html
 
 <table id="table" class="table" width="100%">
@@ -76,37 +104,33 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 
 ```
 
-```js
-
-import Podtable from 'podtable';
-
-new Podtable('#table')
-
-```
-
-The podtable instance receives two params the first parameter is an element selector OR a table element and also the second parameter is a config object which receives a key value pairs in achieving a responsive table which can be use together or as your use case demands.
+Then initialize podtable by passing the table selector
 
 ```js
-
 new Podtable('#table', {
     // config options
 })
+```
+Or passing the element directly
 
-// OR pass the table element directly
+```js
 new Podtable(document.querySelector('#table'), {
     // config options
 })
-
 ```
 
-#### Config Options
+The podtable instance receives two params the first parameter is an element selector or a table element and also the second parameter is a config object which receives a key value pairs in achieving a responsive table which can be use together or as your use case demands.
+
+## Config Options
 
 * `KeepCell`
 * `priority`
 * `method`
 * `rowGroup`
 
-The `keepCell` which is an array of cells index that wont be hidden.
+#### `keepCell`
+
+which is an array of cells index that wont be hidden.
 Also note the first cell for the table rows with an index of `0` will not be hidden by default.
 
 ```js
@@ -115,14 +139,18 @@ new Podtable('#table', {
 });
 ```
 
-The `priority` config option which is an array of index of cells, which determines how cells will be hidden and if only few cell index are passed to the `priority` config object this will take precedence over the other cell index.
+#### `priority`
+
+This config option which is an array of index of cells, which determines how cells will be hidden and if only few cell index are passed to the priority config object this will take precedence over the other cell index.
 
 ```js
 new Podtable('#table', {
     priority: [2, 4, 5]
 })
 ```
-The config option `method` option which takes in a function to be executed for the hidden cells. and the function receives a parameter to acess the index of the cell that was last hidden.
+####  `method`
+
+This config option option which takes in a function to be executed for the hidden cells. and the function receives a parameter to acess the index of the cell that was last hidden.
 
 ```js
 new Podtable('#table', {
@@ -134,7 +162,9 @@ new Podtable('#table', {
 });
 ```
 
-The config option `rowGroup` which takes in a boolean in order to use the row group feature, so for this to work 
+#### `rowGroup`
+
+This config option which takes in a boolean in order to use the row group feature, so for this to work 
 
 * Data Iteration needs to be done via the body tag that is rows should be grouped together via the body tag
 
@@ -144,13 +174,18 @@ The config option `rowGroup` which takes in a boolean in order to use the row gr
 
 * Your ignored row td cells should have colspan that will correspond to the number of cells in other rows.
 
+```js
+new Podtable('#table', {
+    rowGroup: true
+});
+```
+
 ```html
 <table id="table" class="table" width="100%">
     <thead>
         <tr>
             <th>Firstname</th>
             <th>Lastname</th>
-            ...
             <th></th>
         </tr>
     </thead>
@@ -161,19 +196,12 @@ The config option `rowGroup` which takes in a boolean in order to use the row gr
         <tr>
             <td>Mark</td>
             <td>Spencer</td>
-            ...
             <td></td>
         </tr>
     </tbody>
     ...
     <!-- more body tags here grouping rows together -->
 </table>
-```
-
-```js
-new Podtable('#table', {
-    rowGroup: true
-});
 ```
 
 In fact for every row group you can define an extra row in order to show empty row group message.
@@ -204,21 +232,20 @@ In fact for every row group you can define an extra row in order to show empty r
 </table>
 ```
 
+## Instance methods
+* `destroy()`
 
-## Control column
 
-you can apply the css below if you need to hide the control cell untill its needed.
+#### `destroy()`
 
-```css
-#podtable-container table tr td:last-of-type,
-#podtable-container table tr th:last-of-type {
-    display: none;
-}
+The destroy method revert any alteration to the table in the DOM and detach all event listeners.
 
-#podtable-container table.show-toggle tr td:last-of-type,
-#podtable-container table.show-toggle tr th:last-of-type {
-    display: revert;
-}
+```js
+const podtable = new Podtable('#table', { 
+    // config 
+});
+
+podtable.destroy()
 ```
 
 ## Contributing
@@ -234,8 +261,6 @@ you can view it live on codepen
 ## Roadmap
 * Custom control toggle to show hidden cells in child row.
 * controls toggle in footer thoughts on what to do about it.
-* A `destroy()` method to revert any alteration the table in the DOM
-
 * More awesomeness in achieving a responsive datatable. &#128522;
 
 ## License
