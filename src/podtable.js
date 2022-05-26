@@ -13,6 +13,12 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
+     * Podtable instance
+     * @return object
+     */
+    let _this = {}
+
+    /**
      * config options
      */
     let options = Object.assign({}, defaultOptions, config)
@@ -58,7 +64,6 @@ function Podtable(tableEl, config = {}) {
      */
     let constIndex = []
 
-    
     /**
      * @type object
      */
@@ -75,6 +80,21 @@ function Podtable(tableEl, config = {}) {
      * @returns void
      */
     setToggleCell(table)
+
+    /**
+     * Resize event method
+     */
+    _this.watchResize = false
+
+    /**
+     * Resize event method
+     */
+    _this.nativeResize = false
+
+    /**
+     * observer event method
+     */
+    _this.observer = false
 
     /**
      * Renders the table for the first instance
@@ -96,26 +116,6 @@ function Podtable(tableEl, config = {}) {
         targetRow = table.tHead.rows[0]
     }
 
-    /**
-     * Resize event method
-     */
-    this.watchResize = false
-
-    /**
-     * Resize event method
-     */
-    this.nativeResize = false
-
-    /**
-     * Resize event method
-     */
-    this.windowResize = false
-
-    /**
-     * observer event method
-     */
-    this.observer = false
-    
     /**
      * set the wrapper for podtable
      */
@@ -150,7 +150,7 @@ function Podtable(tableEl, config = {}) {
     function setToggleCell(table) {
         for (let row of table.rows) {
             if (row.parentElement.tagName.toUpperCase() == 'TBODY') {
-                if (! row.hasAttribute('data-ptr-ignore')) {
+                if (!row.hasAttribute('data-ptr-ignore')) {
                     row.lastElementChild.classList.add('toggle')
                 }
             } else {
@@ -170,14 +170,14 @@ function Podtable(tableEl, config = {}) {
             tempConst.push(ci)
         }
 
-        if (Array.isArray(options.priority) && options.priority.length > 0 ) {
+        if (Array.isArray(options.priority) && options.priority.length > 0) {
             constIndex = Array.from(new Set(options.priority.concat(tempConst.reverse())))
         } else {
             constIndex = tempConst.reverse()
         }
 
-        if (! Array.isArray(options.keepCell)) {
-            throw TypeError('keepCell is not an array') 
+        if (!Array.isArray(options.keepCell)) {
+            throw TypeError('keepCell is not an array')
         } else {
             options.keepCell.push(0, tempConst.length - 1)
         }
@@ -188,22 +188,22 @@ function Podtable(tableEl, config = {}) {
      * @param {HTMLCollection} cells 
      * @returns HTMLTableRowElement
      */
-    function childRow (cells) {
+    function childRow(cells) {
         let tr = document.createElement('tr')
         let gridTD = document.createElement('td')
         let gridRow = document.createElement('div')
-        
+
         gridTD.colSpan = constIndex.length
         gridRow.classList.add('child-grid-row')
         tr.classList.add('child')
-    
+
         for (let i = 0; i < cells.length; i++) {
             gridRow.append(cells[i])
         }
-        
+
         gridTD.append(gridRow)
         tr.append(gridTD)
-    
+
         return tr
     }
 
@@ -215,15 +215,15 @@ function Podtable(tableEl, config = {}) {
     function gridCol(el) {
         let gridCol = document.createElement('div')
         gridCol.classList.add('child-grid-col')
-    
+
         let dataColName = document.createElement('div')
         let dataColDesc = document.createElement('div')
         dataColName.innerHTML = table.tHead.rows[0].cells[el.cellIndex].innerHTML
         dataColDesc.innerHTML = el.innerHTML
-    
+
         gridCol.append(dataColName)
         gridCol.append(dataColDesc)
-        
+
         return gridCol
     }
 
@@ -233,10 +233,10 @@ function Podtable(tableEl, config = {}) {
      */
     function toggle(e) {
         if (hiddenCells.length <= 0) { return }
-        
+
         let parent = e.currentTarget.parentElement
 
-        if(parent.classList.contains('has-child')) {
+        if (parent.classList.contains('has-child')) {
             parent.classList.remove('has-child')
             parent.nextElementSibling.remove()
         } else {
@@ -263,19 +263,19 @@ function Podtable(tableEl, config = {}) {
         let toggleEls = document.querySelectorAll('.toggle')
         let toggler = e.currentTarget
 
-        if(toggler.classList.contains('expanded')) {
+        if (toggler.classList.contains('expanded')) {
             for (let i = 0; i < toggleEls.length; i++) {
                 let togsParent = toggleEls[i].parentElement
                 if (togsParent.classList.contains('has-child')) {
                     toggleEls[i].click()
                 }
             }
-            
+
             toggler.classList.remove('expanded')
         } else {
             for (let i = 0; i < toggleEls.length; i++) {
                 let togsParent = toggleEls[i].parentElement
-                if (! togsParent.classList.contains('has-child')) {
+                if (!togsParent.classList.contains('has-child')) {
                     toggleEls[i].click()
                 }
             }
@@ -289,7 +289,7 @@ function Podtable(tableEl, config = {}) {
      * toggle and main-toggle so as to toggle child rows
      * @return void
      */
-    function addToggleListener () {
+    function addToggleListener() {
         let togElements = document.querySelectorAll('.toggle')
         for (let i = 0; i < togElements.length; i++) {
             togElements[i].addEventListener('click', toggle)
@@ -317,8 +317,8 @@ function Podtable(tableEl, config = {}) {
      * Check if there are hidden elements ands determine when to show
      * child row toggle button and also clean up unused css class.
      */
-    function doTogglerScreen () {
-        if(hiddenCells.length > 0) {
+    function doTogglerScreen() {
+        if (hiddenCells.length > 0) {
             table.classList.add('show-toggle')
         } else {
             document.querySelectorAll('.has-child').forEach(el => {
@@ -336,10 +336,10 @@ function Podtable(tableEl, config = {}) {
      * and its like this so as to get an updated data from the cells
      * child row are redrawn on each control toggle.
      */
-    function childRowListener () {
+    function childRowListener() {
         let childRows = document.querySelectorAll('tr.child')
-        
-        if(childRows.length > 0) {
+
+        if (childRows.length > 0) {
             let parentRows = []
 
             for (let row of childRows) {
@@ -349,7 +349,7 @@ function Podtable(tableEl, config = {}) {
             // Iterate from parents elements down to child elements
             for (let p = 0; p < parentRows.length; p++) {
                 let isHidden = []
-                
+
                 for (let cell of parentRows[p].cells) {
                     if (cell.classList.contains('hidden')) {
                         isHidden.push(gridCol(cell))
@@ -360,8 +360,8 @@ function Podtable(tableEl, config = {}) {
                 // we also check if the hidden cells length > 0 before inserting a new child row
                 // so as to avoid empty child rows and orphaned child rows
                 parentRows[p].nextElementSibling.remove()
-                
-                if(hiddenCells.length > 0) {
+
+                if (hiddenCells.length > 0) {
                     parentRows[p].after(childRow(isHidden))
                 }
 
@@ -378,7 +378,7 @@ function Podtable(tableEl, config = {}) {
     function hideMain(index, pt = table) {
         hiddenCells.push(index)
 
-        for (let row of pt.rows) {            
+        for (let row of pt.rows) {
             if (!row.classList.contains('child') && !row.hasAttribute('data-ptr-ignore')) {
                 row.cells[index].classList.add('hidden')
             }
@@ -408,18 +408,18 @@ function Podtable(tableEl, config = {}) {
      */
     function recalc() {
         flush()
-        
+
         for (let i = 0; i < constIndex.length; i++) {
             if (targetRow.clientWidth > tableContainer.clientWidth) {
                 if (!hiddenCells.includes(constIndex[i])) {
-                    if (! options.keepCell.includes(constIndex[i])) {
+                    if (!options.keepCell.includes(constIndex[i])) {
                         hideMain(constIndex[i])
                         childRowListener()
-                    } 
+                    }
                 }
             }
         }
-        
+
         doTogglerScreen()
     }
 
@@ -429,7 +429,7 @@ function Podtable(tableEl, config = {}) {
      */
     function resize() {
         recalc()
-        
+
         if (hiddenCells.length <= 0) {
             eventDispatch(-1)
             childRowListener()
@@ -444,14 +444,14 @@ function Podtable(tableEl, config = {}) {
     function mount() {
         hiddenCells = []
         let ilength = constIndex.length
-        
+
         for (let i = 0; i < ilength; i++) {
 
             if (targetRow.clientWidth > tableContainer.clientWidth) {
-                if(! hiddenCells.includes(constIndex[i])) {
-                    if (! options.keepCell.includes(constIndex[i])) {
+                if (!hiddenCells.includes(constIndex[i])) {
+                    if (!options.keepCell.includes(constIndex[i])) {
                         hideMain(constIndex[i])
-                    } 
+                    }
                 }
             }
         }
@@ -477,19 +477,18 @@ function Podtable(tableEl, config = {}) {
      */
     function observed() {
         try {
-            let ro = new ResizeObserver((entries) => {
+            _this.nativeResize = new ResizeObserver((entries) => {
                 if (entries[0].target.clientWidth !== oldTableContainerWidth) {
                     observeResize()
                 }
-    
+
                 oldTableContainerWidth = entries[0].target.clientWidth
             })
-                
-            ro.observe(tableContainer)
 
-            this.nativeResize = ro
+            _this.nativeResize.observe(tableContainer)
+            return true
         } catch (err) {
-            return  false
+            return false
         }
     }
 
@@ -503,8 +502,8 @@ function Podtable(tableEl, config = {}) {
 
         if (!observed()) {
             try {
-                this.watchResize = watch(tableContainer, resize)
-                this.watchResize.start()
+                _this.watchResize = watch(tableContainer, resize)
+                _this.watchResize.start()
             } catch (err) {
                 window.addEventListener('resize', resize) 
             }
@@ -518,7 +517,7 @@ function Podtable(tableEl, config = {}) {
         window.removeEventListener('resize', resize)
         flush()
 
-        detachRows(table, tableContainer, this)
+        detachRows(table, tableContainer, _this)
         removeToggleListener()
     }
 
@@ -536,7 +535,7 @@ function Podtable(tableEl, config = {}) {
      */
     function watchMutation(table) {
         function resetRow(node) {
-            if (! node.hasAttribute('data-ptr-ignore')) {
+            if (!node.hasAttribute('data-ptr-ignore')) {
                 node.lastElementChild.classList.add('toggle')
                 node.lastElementChild.addEventListener('click', (e) => toggle(e))
             }
@@ -571,8 +570,8 @@ function Podtable(tableEl, config = {}) {
         }
 
         let observable = options.rowGroup ? table : table.tBodies[0]
-        this.observer = new MutationObserver(callback)
-        this.observer.observe(observable, { childList: true })
+        _this.observer = new MutationObserver(callback)
+        _this.observer.observe(observable, { childList: true })
     }
 
     /**
@@ -598,7 +597,7 @@ function Podtable(tableEl, config = {}) {
         }
     }
 
-    if (options.method) { return state }
+    return state 
 }
 
 export default Podtable

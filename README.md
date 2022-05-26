@@ -250,7 +250,7 @@ podtable.destroy()
 
 ## Contributing
 
-Thank you for considering to contribute to Podtablejs, pull requests, is highly recommended not just bug reports.
+Thank you for considering to contribute to Podtablejs, pull requests, is highly recommended not just bug reports & dont forget to star this repo.
 
 
 ## Examples

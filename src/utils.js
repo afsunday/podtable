@@ -51,16 +51,16 @@ export function getTable(tableEl) {
 export function detachRows(table, container, _this) {
     _this.observer.disconnect()
 
-    if (typeof _this.nativeResize === undefined || _this.nativeResize === false)
+    if (typeof _this.nativeResize !== undefined && _this.nativeResize !== false)
         _this.nativeResize.disconnect()
     
-    if (typeof _this.watchResize === undefined || _this.watchResize === false)
+    if (typeof _this.watchResize !== undefined && _this.watchResize !== false)
         _this.watchResize.stop()
 
-    let parentRows = table.querySelectorAll("tr.has-child")
+    let parentRows = table.querySelectorAll('tr.has-child')
 
     for (let row of parentRows) {
-        row.classList.remove("has-child")
+        row.classList.remove('has-child')
         if (row.nextElementSibling.classList.contains('child')) {
             row.nextElementSibling.remove()
         }
