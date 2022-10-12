@@ -153,7 +153,9 @@ function Podtable(tableEl, config = {}) {
                 if (!row.hasAttribute('data-ptr-ignore')) {
                     row.lastElementChild.classList.add('toggle')
                 }
-            } else {
+            }
+            
+            if (row.parentElement.tagName.toUpperCase() == 'THEAD') {
                 row.lastElementChild.classList.add('main-toggle')
             }
         }

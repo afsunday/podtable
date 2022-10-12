@@ -77,6 +77,8 @@ import Podtable from  "podtable"
 
 * Also podtable css doesn't include general table styling only css which it needs so you can style your table as you want.
 
+* Also never include more that one row in the able header <em>currently</em> this will prevent podtable from working properly
+
 * if you are using vuejs always provide a [Unique key for your v-for](https://stackoverflow.com/questions/56726147/why-does-vue-use-its-in-place-patch-though-im-binding-a-key-in-v-for-loop) because of vue's [In-place-patch](https://v3.vuejs.org/guide/list.html#maintaining-state) strategy.
 
 
@@ -168,12 +170,13 @@ This config option which takes in a boolean in order to use the row group featur
 
 * Data Iteration needs to be done via the body tag that is rows should be grouped together via the body tag
 
-* podtable assumes every first row of each body tag is the row group header hence there is need to let podtable know it should ignore it using a dataset `data-ptr-ignore`
+* podtable assumes every first row of each body tag is the row group header hence there is need to let podtable know it should ignore it using a dataset `data-ptr-ignore` <em>This attribute make podtable ignore the row entire from control and responsive action hence a colspan is important to avoid breaking the table behaviour</em>
 
 * Content in your ignored rows should be wrapable and should not have a fixed width
 
 * Your ignored row td cells should have colspan that will correspond to the number of cells in other rows.
 
+* Currently the dataset `data-ptr-ignore` is only meant for the body tag when you are using row group feature and also in the footer while you use it in the footer make sure you add apply your colspan.
 ```js
 new Podtable('#table', {
     rowGroup: true
