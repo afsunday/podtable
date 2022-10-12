@@ -259,8 +259,6 @@ you can view it live on codepen
 * V1.1.4 [https://codepen.io/inlogicstudio/pen/wvqLEXP](https://codepen.io/inlogicstudio/pen/wvqLEXP) 
 
 ## Roadmap
-* Custom control toggle to show hidden cells in child row.
-* controls toggle in footer thoughts on what to do about it.
 * More awesomeness in achieving a responsive datatable. &#128522;
 
 ## License
