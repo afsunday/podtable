@@ -74,7 +74,7 @@ import Podtable from "podtable";
 
 - Also podtable css doesn't include general table styling only css which it needs so you can style your table as you want.
 
-- Also never include more that one row in the able header <em>currently</em> this will prevent podtable from working properly
+- Also never include more that one row in the table header <em>currently</em> this will prevent podtable from working properly
 
 - if you are using vuejs always provide a [Unique key for your v-for](https://stackoverflow.com/questions/56726147/why-does-vue-use-its-in-place-patch-though-im-binding-a-key-in-v-for-loop) because of vue's [In-place-patch](https://v3.vuejs.org/guide/list.html#maintaining-state) strategy.
 
