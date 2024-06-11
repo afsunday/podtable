@@ -85,6 +85,8 @@ import Podtable from "podtable";
 
 - if you are using vuejs always provide a [Unique key for your v-for](https://stackoverflow.com/questions/56726147/why-does-vue-use-its-in-place-patch-though-im-binding-a-key-in-v-for-loop) because of vue's [In-place-patch](https://v3.vuejs.org/guide/list.html#maintaining-state) strategy.
 
+- HTML needs to be structured properly to avoid issues
+
 Your HTML structure
 
 ```html
