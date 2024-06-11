@@ -33,7 +33,9 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 
 ##### NPM
 
-`npm install podtable`
+```
+npm install podtable
+```
 
 ##### CDN
 
