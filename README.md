@@ -37,8 +37,13 @@ Podtable is a no dependency table library to fit large table dataset into smalle
 
 ##### CDN
 
-`https://unpkg.com/podtable@<VERSION>/dist/podtable.css` <br>
-`https://unpkg.com/podtable@<VERSION>/dist/podtable.js`
+```
+https://unpkg.com/podtable@<VERSION>/dist/podtable.css
+```
+
+```
+https://unpkg.com/podtable@<VERSION>/dist/podtable.js
+```
 
 ## Usage
 
