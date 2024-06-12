@@ -1,5 +1,5 @@
 #podtable-container {
-    position: relative;
+    /* position: relative; */
     overflow-x: hidden;
     padding: 0px;
 }
@@ -23,6 +23,7 @@
 #podtable-container table .toggle,
 #podtable-container table .main-toggle {
     cursor: pointer;
+    position: relative;
 }
 
 #podtable-container table.show-toggle .toggle::before,
