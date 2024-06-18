@@ -546,6 +546,14 @@ function Podtable(tableEl, config = {}) {
     }
 
     /**
+     * Revert all events made to the DOM for livewire
+     */
+    function livewireDestroy() {
+        setToggleCell(table);
+        removeToggleListener();
+    }
+
+    /**
      * Revert all events made to the DOM
      */
     function destroy() {
