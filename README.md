@@ -269,7 +269,7 @@ you can view it live on codepen
 ## Roadmap
 
 - More awesomeness in achieving a responsive datatable. &#128522;
-- Send in your feature requests if you have feature you want me to add.
+- Send in your feature requests if you have features you want me to add.
 
 ## License
 
